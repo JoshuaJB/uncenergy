@@ -25,14 +25,14 @@
       case 'monthly':
         return 'One Month';
       case 'weekly':
-        return 'One Week'
+        return 'One Week';
       case 'yearly':
         return 'One Year';
       }
     }
     function generateHistory() {
-      var iterations;
-      var history = new Array();
+      var iterations = 0;
+      var history = [];
 
       if (historyType == 'daily')
         iterations = 24;
