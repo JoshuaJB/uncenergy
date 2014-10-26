@@ -7,24 +7,47 @@
     function drawHistory() {
       if (!result || !result['data'][energyType][historyType])
         return;
-      var data = google.visualization.arrayToDataTable([
-        ["Day", result['data'][energyType]['live']['nativeUnit']],
-        ['1', Number(result['data'][energyType][historyType]['previous'][0]['amount'])],
-        ['2', Number(result['data'][energyType][historyType]['previous'][1]['amount'])],
-        ['3', Number(result['data'][energyType][historyType]['previous'][2]['amount'])],
-        ['4', Number(result['data'][energyType][historyType]['previous'][3]['amount'])],
-        ['5', Number(result['data'][energyType][historyType]['previous'][4]['amount'])],
-        ['6', Number(result['data'][energyType][historyType]['previous'][5]['amount'])],
-        ['7', Number(result['data'][energyType][historyType]['previous'][6]['amount'])],
-      ]);
+      var data = google.visualization.arrayToDataTable(generateHistory());
       var options = {
-        hAxis: {title: historyType[0, historyType.length - 2].capitalize(), titleTextStyle: {color: '#333'}},
+        hAxis: {title: historyTypeString(), titleTextStyle: {color: '#333'}},
         vAxis: {title: result['data'][energyType]['live']['nativeUnit'], minValue: 0},
         legend: 'none'
       };
       document.querySelector("history-card").shadowRoot.getElementById("title").innerHTML = "Historical " + energyType.capitalize() + " Usage";
       var chart = new google.visualization.AreaChart(document.querySelector("history-card").shadowRoot.getElementById("history-chart"));
       chart.draw(data, options);
+    }
+    function historyTypeString() {
+      switch (historyType)
+      {
+      case 'daily':
+        return 'One Day';
+      case 'monthly':
+        return 'One Month';
+      case 'weekly':
+        return 'One Week'
+      case 'yearly':
+        return 'One Year';
+      }
+    }
+    function generateHistory() {
+      var iterations;
+      var history = new Array();
+
+      if (historyType == 'daily')
+        iterations = 24;
+      else if (historyType == 'weekly')
+        iterations = 7;
+      else if (historyType == 'monthly')
+        iterations = 30;
+      else if (historyType == 'yearly')
+        iterations = 10;
+      history.push(["", result['data'][energyType]['live']['nativeUnit']]);
+
+      for (int i = 0; i < iterations; i++)
+        history.push(['', Number(result['data'][energyType][historyType]['previous'][i]['amount'])]);
+
+      return history;
     }
     </script>
     <style>
