@@ -21,13 +21,26 @@
       switch (historyType)
       {
       case 'daily':
-        return 'One Day';
+        return '24 Hours';
       case 'monthly':
-        return 'One Month';
+        return '30 Days';
       case 'weekly':
-        return 'One Week';
+        return '7 Days';
       case 'yearly':
-        return 'One Year';
+        return '10 Years';
+      }
+    }
+    function historyString(input) {
+      switch (input)
+      {
+      case '24 Hours':
+        return 'daily';
+      case '30 Days':
+        return 'monthly';
+      case '7 Days':
+        return 'weekly';
+      case '10 Years':
+        return 'yearly';
       }
     }
     function generateHistory() {
@@ -78,14 +91,34 @@
       text-align:center;
       position:absolute;
     }
+    #historySel {
+      position:absolute;
+      width: 100%-40px;
+      left: 20px;
+      right: 20px;
+      top: 370px;
+
+    }
     </style>
     <paper-shadow z="3"></paper-shadow>
     <div class="card-header" layout horizontal center>
       <div id="history-chart"></div>
       <p id="title"></p>
       <p id="building"></p>
+      <paper-dropdown-menu id="historySel" selected="24 Hours" valueattr="label">
+        <paper-item id="daily" label="24 Hours"></paper-item>
+        <paper-item id="weekly" label="7 Days"></paper-item>
+        <paper-item id="monthly" label="30 Days"></paper-item>
+        <paper-item id="yearly" label="10 Years"></paper-item>
+      </paper-dropdown-menu>
     </div>
-    
+    <script>
+    var drops = document.querySelector("history-card").shadowRoot.querySelector('paper-dropdown-menu');
+    drops.addEventListener('core-select', function() {
+      historyType = historyString(this.selected);
+      requestDocument();
+    });
+    </script>
   </template>
   <script>
   Polymer({});
