@@ -30,16 +30,7 @@
       var chart = new google.visualization.PieChart(document.querySelector("meter-card").shadowRoot.getElementById('piechart'));
       chart.draw(data, options);
       setTimeout(function(){drawChart()}, 1000);
-    }/*
-    function BuildingPowerPercent() {
-      return buildingPowerPercent;
     }
-    function BuildingName() {
-      return buildingName;
-    }
-    function BuildingUnits() {
-      return buildingUnits;
-    }*/
     </script>
     <style>
     :host {
@@ -58,19 +49,12 @@
     .card-header ::content p {
       font-size:20px;
       position:absolute;
-      /*width:100px;*/
-      margin-left: 33%;
-      margin-top: 290px;
+      width:100px;
+      left: 170px;
+      margin-top: 260px;
       text-align:center;
       color:gray;
-      display:none;
-    }/*
-    polyfill-next-selector { content: '.card-header img'; }
-    .card-header ::content img {
-      width: 70px;
-      border-radius: 50%;
-      margin: 10px;
-    }*/
+    }
     #amount {
       font-size:60px;
       position:absolute;
@@ -97,7 +81,7 @@
     <div class="card-header" layout horizontal center>
       <div id="piechart"></div>
       <p id="amount"></p>
-      <p id="units">KWh</p>
+      <p id="units"></p>
       <content id="building" select="p"></content>
     </div>
     

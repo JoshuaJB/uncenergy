@@ -32,7 +32,7 @@
 		function updatePage() {
 			var result = JSON.parse(httpRequest.responseText);
 			buildingPower = result['data']['electricity']['live']['amount']
-			buildingPowerPercent = buildingPower / result['data']['electricity']['live']['maxRange'];
+			buildingPowerPercent = 100 * buildingPower / result['data']['electricity']['live']['maxRange'];
 			buildingName = result['name'];
 			buildingUnits = result['data']['electricity']['live']['unit'];
 			requestDocument();
