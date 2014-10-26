@@ -40,7 +40,7 @@
 			document.querySelector('#ajaxError').show();
 		}
 		function requestDocument() {
-			httpRequest.open('GET', '/api.php?building=' + currentBuilding, true);
+			httpRequest.open('GET', 'http://uncenergy.me/api.php?building=' + currentBuilding, true);
 			httpRequest.send();
 		}
 		String.prototype.capitalize = function() {
@@ -90,22 +90,10 @@
 		</core-menu>
 	</core-header-panel>  
 	<span tool>UNC Energy Dashboard</span>
-<!--
-	<core-toolbar class="medium-tall">
-		<paper-icon-button id="navicon" icon="menu"></paper-icon-button>
-		<span flex>UNC Power</span>
-		<paper-icon-button id="morebutton" icon="more-vert"></paper-icon-button>
-		<paper-tabs class="bottom fit" selected="0">
-			<paper-tab name="electricity">Electricity</paper-tab>
-			<paper-tab name="heating">Heating</paper-tab>
-			<paper-tab name="cooling">Cooling</paper-tab>
-		<paper-tabs>
-	</core-toolbar>-->
 	<div class="container" layout vertical center>
 		<meter-card>
 		</meter-card>
 		<history-card>
-			<p>Month</p>
 		</history-card>
 	</div>
 	<paper-toast id="ajaxError" role="alert" text="There was an error getting data from the server.">
@@ -113,7 +101,6 @@
 	</paper-toast>
 	<script>
 	var tabs = document.querySelector('core-menu');
-
 	tabs.addEventListener('core-select', function() {
 		currentBuilding = tabs.children[tabs.selected].id;
 		requestDocument();
