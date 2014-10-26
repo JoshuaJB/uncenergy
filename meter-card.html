@@ -28,6 +28,7 @@
       document.querySelector("meter-card").shadowRoot.getElementById("amount").innerHTML = result['data'][energyType]['live']['amount'];
       document.querySelector("meter-card").shadowRoot.getElementById("units").innerHTML = result['data'][energyType]['live']['nativeUnit'];
       document.querySelector("meter-card").shadowRoot.getElementById("building").innerHTML = result['name'];
+      document.querySelector("meter-card").shadowRoot.getElementById("title").innerHTML = "Current " + energyType + " Usage";
       var chart = new google.visualization.PieChart(document.querySelector("meter-card").shadowRoot.getElementById('piechart'));
       chart.draw(data, options);
     }
@@ -91,7 +92,7 @@
     <paper-shadow z="3"></paper-shadow>
     <div class="card-header" layout horizontal center>
       <div id="piechart"></div>
-      <p id="name">Current Power Usage</p>
+      <p id="title"></p>
       <p id="amount"></p>
       <p id="units"></p>
       <p id="building"></p>

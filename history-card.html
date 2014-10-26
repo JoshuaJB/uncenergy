@@ -22,6 +22,7 @@
         vAxis: {title: result['data'][energyType]['live']['nativeUnit'], minValue: 0},
         legend: 'none'
       };
+      document.querySelector("history-card").shadowRoot.getElementById("title").innerHTML = "Historical " + energyType + " Usage";
       var chart = new google.visualization.AreaChart(document.querySelector("history-card").shadowRoot.getElementById("history-chart"));
       chart.draw(data, options);
     }
@@ -83,7 +84,7 @@
     <paper-shadow z="3"></paper-shadow>
     <div class="card-header" layout horizontal center>
       <div id="history-chart"></div>
-      <p id="name">Historical Power Usage</p>
+      <p id="title"></p>
       <p id="building"></p>
     </div>
     
