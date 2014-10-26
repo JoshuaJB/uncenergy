@@ -9,13 +9,13 @@
         return;
       var data = google.visualization.arrayToDataTable([
         ["Day", result['data'][energyType]['live']['nativeUnit']],
-        ['1', result['data'][energyType][historyType][0]['amount']],
-        ['2', result['data'][energyType][historyType][1]['amount']],
-        ['3', result['data'][energyType][historyType][2]['amount']],
-        ['4', result['data'][energyType][historyType][3]['amount']],
-        ['5', result['data'][energyType][historyType][4]['amount']],
-        ['6', result['data'][energyType][historyType][5]['amount']],
-        ['7', result['data'][energyType][historyType][6]['amount']],
+        ['1', result['data'][energyType][historyType]['current'][0]['amount']],
+        ['2', result['data'][energyType][historyType]['current'][1]['amount']],
+        ['3', result['data'][energyType][historyType]['current'][2]['amount']],
+        ['4', result['data'][energyType][historyType]['current'][3]['amount']],
+        ['5', result['data'][energyType][historyType]['current'][4]['amount']],
+        ['6', result['data'][energyType][historyType]['current'][5]['amount']],
+        ['7', result['data'][energyType][historyType]['current'][6]['amount']],
       ]);
       var options = {
         hAxis: {title: historyType[0, historyType.length - 2].capitalize(), titleTextStyle: {color: '#333'}},
