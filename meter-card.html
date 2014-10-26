@@ -5,7 +5,7 @@
     <script type="text/javascript">
     google.setOnLoadCallback(drawChart);
     function drawChart() {
-      if (!result)
+      if (!result || !result['data'][energyType]['live'])
         return;
       var data = google.visualization.arrayToDataTable([
         ['Amount', 'Percentage'],
@@ -26,7 +26,7 @@
         }
       };
       document.querySelector("meter-card").shadowRoot.getElementById("amount").innerHTML = result['data'][energyType]['live']['amount'];
-      document.querySelector("meter-card").shadowRoot.getElementById("units").innerHTML = result['data'][energyType]['live']['unit'];
+      document.querySelector("meter-card").shadowRoot.getElementById("units").innerHTML = result['data'][energyType]['live']['nativeUnit'];
       document.querySelector("meter-card").shadowRoot.getElementById("building").innerHTML = result['name'];
       var chart = new google.visualization.PieChart(document.querySelector("meter-card").shadowRoot.getElementById('piechart'));
       chart.draw(data, options);

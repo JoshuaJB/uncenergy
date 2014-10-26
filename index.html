@@ -25,6 +25,7 @@
 		var currentBuilding = '113';
 		var httpRequest = new XMLHttpRequest();
 		var energyType = 'electricity';
+		var historyType = 'daily';
 		var result;
 		httpRequest.addEventListener("load", updatePage, false);
 		httpRequest.addEventListener("error", loadError, false);
@@ -32,7 +33,8 @@
 		function updatePage() {
 			result = JSON.parse(httpRequest.responseText);
 			drawChart();
-			setTimeout(function(){requestDocument();}, 1500);
+			drawHistory();
+			setTimeout(function(){requestDocument();}, 2000);
 		}
 		function loadError() {
 			document.querySelector('#ajaxError').show();
@@ -40,6 +42,9 @@
 		function requestDocument() {
 			httpRequest.open('GET', '/api.php?building=' + currentBuilding, true);
 			httpRequest.send();
+		}
+		String.prototype.capitalize = function() {
+			return this.charAt(0).toUpperCase() + this.slice(1);
 		}
 	</script>
 	<style>
