@@ -10,7 +10,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <!--
 @group Paper Elements
 
-Material Design: <a href="https://spec.googleplex.com/quantum/components/buttons.html">Buttons</a>
+Material Design: <a href="http://www.google.com/design/spec/components/buttons.html">Buttons</a>
 
 `paper-icon-button` is a button with an image placed at the center. When the user touches
 the button, a ripple effect emanates from the center of the button.
@@ -89,6 +89,11 @@ you should ensure that the `aria-label` attribute is set.
         pointer-events: none;
         z-index: -1;
       }
+
+      #icon {
+        display: block;
+        pointer-events: none;
+      }
     </style>
 
     <!-- to position to ripple behind the icon -->
@@ -128,7 +133,10 @@ you should ensure that the `aria-label` attribute is set.
       },
 
       iconChanged: function(oldIcon) {
-        this.setAttribute('aria-label', this.icon);
+        var label = this.getAttribute('aria-label');
+        if (!label || label === oldIcon) {
+          this.setAttribute('aria-label', this.icon);
+        }
       }
 
     });

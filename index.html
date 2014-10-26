@@ -5,16 +5,38 @@
 	<title>UNC Energy</title>
 
 	<meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-	<script src="/components/platform/platform.js"></script>
+	<script src="/components/webcomponentsjs/webcomponents.js"></script>
 	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
 	<link rel="import" href="/components/font-roboto/roboto.html">
 	<link rel="import" href="/components/core-header-panel/core-header-panel.html">
 	<link rel="import" href="/components/core-toolbar/core-toolbar.html">
 	<link rel="import" href="/components/paper-tabs/paper-tabs.html">
+	<link rel="import" href="components/paper-elements/paper-elements.html">
 	<link rel="import" href="/meter-card.html">
+	<link rel="import" href="/history-card.html">
 	<script>
 		google.load('visualization', '1', {'packages':['corechart']});
+	</script>
+	<script>
+		var currentBuilding = '058';
+		var ajaxErrors = 0;
+		var httpRequest = new XMLHttpRequest();
+		httpRequest.onload = updatePage();
+		httpRequest.onerror = loadError();
+		function updatePage() {
+			var result = JSON.Parse(httpRequest.responseText);
+			alert(result);
+			requestDocument();
+		}
+		function loadError() {
+			document.querySelector('#ajaxError').show();
+		}
+		function requestDocument() {
+			httpRequest.open('GET', '/api.php?building=' + currentBuilding, true);
+			httpRequest.send();
+		}
+		requestDocument();
 	</script>
 	<style>
 	html,body {
@@ -68,7 +90,13 @@
 		<meter-card>
 			<p>Morehead Planitarium</p>
 		</meter-card>
+		<history-card>
+			<p>Month</p>
+		</history-card>
 	</div>
+	<paper-toast id="ajaxError" role="alert" text="There was an error getting data from the server.">
+		<div style="color: #eeff41;" onclick="requestDocument">Retry</div>
+	</paper-toast>
 </body>
 
 </html>
