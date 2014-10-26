@@ -6,10 +6,12 @@
     google.load('visualization', '1', {'packages':['corechart']});
     google.setOnLoadCallback(drawChart);
     function drawChart() {
+      if (!result)
+        return;
       var data = google.visualization.arrayToDataTable([
         ['Amount', 'Percentage'],
-        ['Use', 0.75 * buildingPowerPercent],
-        ['',    0.75 * (100 - buildingPowerPercent)],
+        ['Use', 0.75 * buildingPowerPercent()],
+        ['',    0.75 * (100 - buildingPowerPercent())],
         ['',    25]
       ]);
       var options = {
@@ -24,11 +26,14 @@
           2: { color: 'transparent' },
         }
       };
-      document.querySelector("meter-card").shadowRoot.getElementById("amount").innerHTML = buildingPower;
-      document.querySelector("meter-card").shadowRoot.getElementById("units").innerHTML = buildingUnits;
-      document.querySelector("meter-card").shadowRoot.getElementById("building").innerHTML = buildingName;
+      document.querySelector("meter-card").shadowRoot.getElementById("amount").innerHTML = result['data'][energyType]['live']['amount'];
+      document.querySelector("meter-card").shadowRoot.getElementById("units").innerHTML = result['data'][energyType]['live']['unit'];
+      document.querySelector("meter-card").shadowRoot.getElementById("building").innerHTML = result['name'];
       var chart = new google.visualization.PieChart(document.querySelector("meter-card").shadowRoot.getElementById('piechart'));
       chart.draw(data, options);
+    }
+    function buildingPowerPercent() {
+      return 100 * result['data'][energyType]['live']['amount'] / result['data'][energyType]['live']['maxRange'];
     }
     </script>
     <style>
@@ -75,7 +80,6 @@
       height:400px;
     }
     #name {
-      z-index: 2;
       margin-top: 20px;
       width: 100%;
       left: 0;
@@ -87,8 +91,8 @@
     </style>
     <paper-shadow z="3"></paper-shadow>
     <div class="card-header" layout horizontal center>
-      <p id="name">Current Power Usage</p>
       <div id="piechart"></div>
+      <p id="name">Current Power Usage</p>
       <p id="amount"></p>
       <p id="units"></p>
       <p id="building"></p>

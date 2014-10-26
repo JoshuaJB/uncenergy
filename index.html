@@ -23,24 +23,16 @@
 	</script>
 	<script>
 		var currentBuilding = '113';
-		var ajaxErrors = 0;
 		var httpRequest = new XMLHttpRequest();
-		var buildingPowerPercent = 0;
-		var buildingPower = 0;
-		var buildingUnits = '';
-		var buildingName = '';
 		var energyType = 'electricity';
+		var result;
 		httpRequest.addEventListener("load", updatePage, false);
 		httpRequest.addEventListener("error", loadError, false);
 		requestDocument();
 		function updatePage() {
-			var result = JSON.parse(httpRequest.responseText);
-			buildingPower = result['data'][energyType]['live']['amount']
-			buildingPowerPercent = 100 * buildingPower / result['data'][energyType]['live']['maxRange'];
-			buildingName = result['name'];
-			buildingUnits = result['data'][energyType]['live']['unit'];
+			result = JSON.parse(httpRequest.responseText);
 			drawChart();
-			requestDocument();
+			setTimeout(function(){requestDocument();}, 1000};
 		}
 		function loadError() {
 			document.querySelector('#ajaxError').show();
