@@ -1,0 +1,104 @@
+<link rel="import" href="../components/polymer/polymer.html">
+<link rel="import" href="../components/core-icon-button/core-icon-button.html">
+
+<polymer-element name="meter-card">
+  <template>
+    <script type="text/javascript">
+    google.load('visualization', '1', {'packages':['corechart']});
+    google.setOnLoadCallback(drawChart);
+    function drawChart() {
+      var data = google.visualization.arrayToDataTable([
+        ['Amount', 'Percentage'],
+        ['Use', 0.75 * BuildingPowerPercent()],
+        ['',    0.75 * (100 - BuildingPowerPercent())],
+        ['',    25]
+      ]);
+      var options = {
+        legend: 'none',
+        pieSliceText: 'none',
+        pieHole: 0.5,
+        pieStartAngle: -90-45,
+        tooltip: { trigger: 'none' },
+        slices: {
+          0: { color: 'red' },
+          1: { color: 'grey' },
+          2: { color: 'transparent' },
+        }
+      };
+      document.querySelector("meter-card").shadowRoot.getElementById("amount").innerHTML = BuildingPowerPercent();
+      var chart = new google.visualization.PieChart(document.querySelector("meter-card").shadowRoot.getElementById('piechart'));
+      chart.draw(data, options);
+      setTimeout(function(){drawChart()}, 1000);
+    }
+    function BuildingPowerPercent() {
+      if (Date.now() % 3 == 0)
+        return 50;
+      else
+        return 52;
+    }
+    </script>
+    <style>
+    :host {
+      display: block;
+      position: relative;
+      background-color: white;
+      padding: 20px;
+      width: 100%;
+      font-size: 1.2rem;
+      font-weight: 300;
+    }
+    .card-header {
+      margin-bottom: 10px;
+    }
+    polyfill-next-selector { content: '.card-header p'; }
+    .card-header ::content p {
+      font-size:20px;
+      position:absolute;
+      /*width:100px;*/
+      margin-left: 33%;
+      margin-top: 290px;
+      text-align:center;
+      color:gray;
+      display:none;
+    }/*
+    polyfill-next-selector { content: '.card-header img'; }
+    .card-header ::content img {
+      width: 70px;
+      border-radius: 50%;
+      margin: 10px;
+    }*/
+    #amount {
+      font-size:60px;
+      position:absolute;
+      left: 0px;
+      top: 27%;
+      width: 100%;
+      text-align:center;
+    }
+    #units {
+      font-size:30px;
+      position:absolute;
+      left: 0px;
+      top: 47%;
+      width: 100%;
+      text-align:center;
+    }
+    #piechart {
+      position:relative;
+      width:400px;
+      height:400px;
+    }
+    </style>
+
+    <div class="card-header" layout horizontal center>
+      <div id="piechart"></div>
+      <p id="amount"></p>
+      <p id="units">KWh</p>
+      <content id="building" select="p"></content>
+    </div>
+    
+  </template>
+  <script>
+  Polymer({});
+  </script>
+</polymer-element>
