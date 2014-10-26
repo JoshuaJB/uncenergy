@@ -44,7 +44,7 @@
         iterations = 10;
       history.push(["", result['data'][energyType]['live']['nativeUnit']]);
 
-      for (int i = 0; i < iterations; i++)
+      for (var i = 0; i < iterations; i++)
         history.push(['', Number(result['data'][energyType][historyType]['previous'][i]['amount'])]);
 
       return history;
