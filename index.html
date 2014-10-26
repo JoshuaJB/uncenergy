@@ -22,11 +22,14 @@
 		var currentBuilding = '058';
 		var ajaxErrors = 0;
 		var httpRequest = new XMLHttpRequest();
-		httpRequest.onload = updatePage();
-		httpRequest.onerror = loadError();
+		httpRequest.addEventListener("load", updatePage, false);
+		httpRequest.addEventListener("error", loadError, false);
+		requestDocument();
 		function updatePage() {
-			var result = JSON.parse(httpRequest.responseText);
-			alert(result);
+			var result;
+			alert(String(httpRequest.responseText));
+			if (httpRequest.responseText != undefined)
+				result = JSON.parse(httpRequest.responseText);
 			requestDocument();
 		}
 		function loadError() {
@@ -36,7 +39,6 @@
 			httpRequest.open('GET', '/api.php?building=' + currentBuilding, true);
 			httpRequest.send();
 		}
-		requestDocument();
 	</script>
 	<style>
 	html,body {
