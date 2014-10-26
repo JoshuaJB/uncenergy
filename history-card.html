@@ -9,13 +9,13 @@
         return;
       var data = google.visualization.arrayToDataTable([
         ["Day", result['data'][energyType]['live']['nativeUnit']],
-        ['1', Number(result['data'][energyType][historyType]['current'][0]['amount'])],
-        ['2', Number(result['data'][energyType][historyType]['current'][1]['amount'])],
-        ['3', Number(result['data'][energyType][historyType]['current'][2]['amount'])],
-        ['4', Number(result['data'][energyType][historyType]['current'][3]['amount'])],
-        ['5', Number(result['data'][energyType][historyType]['current'][4]['amount'])],
-        ['6', Number(result['data'][energyType][historyType]['current'][5]['amount'])],
-        ['7', Number(result['data'][energyType][historyType]['current'][6]['amount'])],
+        ['1', Number(result['data'][energyType][historyType]['previous'][0]['amount'])],
+        ['2', Number(result['data'][energyType][historyType]['previous'][1]['amount'])],
+        ['3', Number(result['data'][energyType][historyType]['previous'][2]['amount'])],
+        ['4', Number(result['data'][energyType][historyType]['previous'][3]['amount'])],
+        ['5', Number(result['data'][energyType][historyType]['previous'][4]['amount'])],
+        ['6', Number(result['data'][energyType][historyType]['previous'][5]['amount'])],
+        ['7', Number(result['data'][energyType][historyType]['previous'][6]['amount'])],
       ]);
       var options = {
         hAxis: {title: historyType[0, historyType.length - 2].capitalize(), titleTextStyle: {color: '#333'}},
@@ -71,7 +71,7 @@
       text-align:center;
       color:gray;
     }
-    #name {
+    #title {
       margin-top: 20px;
       width: 100%;
       left: 0;
