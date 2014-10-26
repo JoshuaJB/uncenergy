@@ -9,7 +9,6 @@
         return;
       var data = google.visualization.arrayToDataTable(generateHistory());
       var options = {
-        hAxis: {title: historyTypeString(), titleTextStyle: {color: '#333'}},
         vAxis: {title: result['data'][energyType]['live']['nativeUnit'], minValue: 0},
         legend: 'none'
       };
