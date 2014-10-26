@@ -8,8 +8,8 @@
     function drawChart() {
       var data = google.visualization.arrayToDataTable([
         ['Amount', 'Percentage'],
-        ['Use', 0.75 * BuildingPowerPercent()],
-        ['',    0.75 * (100 - BuildingPowerPercent())],
+        ['Use', 0.75 * buildingPowerPercent],
+        ['',    0.75 * (100 - buildingPowerPercent)],
         ['',    25]
       ]);
       var options = {
@@ -24,17 +24,22 @@
           2: { color: 'transparent' },
         }
       };
-      document.querySelector("meter-card").shadowRoot.getElementById("amount").innerHTML = BuildingPowerPercent();
+      document.querySelector("meter-card").shadowRoot.getElementById("amount").innerHTML = buildingPower;
+      document.querySelector("meter-card").shadowRoot.getElementById("units").innerHTML = buildingUnits;
+      document.querySelector("meter-card").shadowRoot.getElementById("building").innerHTML = buildingName;
       var chart = new google.visualization.PieChart(document.querySelector("meter-card").shadowRoot.getElementById('piechart'));
       chart.draw(data, options);
       setTimeout(function(){drawChart()}, 1000);
-    }
+    }/*
     function BuildingPowerPercent() {
-      if (Date.now() % 3 == 0)
-        return 50;
-      else
-        return 52;
+      return buildingPowerPercent;
     }
+    function BuildingName() {
+      return buildingName;
+    }
+    function BuildingUnits() {
+      return buildingUnits;
+    }*/
     </script>
     <style>
     :host {

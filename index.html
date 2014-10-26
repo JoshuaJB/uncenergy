@@ -19,17 +19,22 @@
 		google.load('visualization', '1', {'packages':['corechart']});
 	</script>
 	<script>
-		var currentBuilding = '058';
+		var currentBuilding = '104';
 		var ajaxErrors = 0;
 		var httpRequest = new XMLHttpRequest();
+		var buildingPowerPercent = 0;
+		var buildingPower = 0;
+		var buildingUnits = '';
+		var buildingName = '';
 		httpRequest.addEventListener("load", updatePage, false);
 		httpRequest.addEventListener("error", loadError, false);
 		requestDocument();
 		function updatePage() {
-			var result;
-			alert(String(httpRequest.responseText));
-			if (httpRequest.responseText != undefined)
-				result = JSON.parse(httpRequest.responseText);
+			var result = JSON.parse(httpRequest.responseText);
+			buildingPower = result['data']['electricity']['live']['amount']
+			buildingPowerPercent = buildingPower / result['data']['electricity']['live']['maxRange'];
+			buildingName = result['name'];
+			buildingUnits = result['data']['electricity']['live']['unit'];
 			requestDocument();
 		}
 		function loadError() {
