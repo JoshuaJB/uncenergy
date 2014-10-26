@@ -25,7 +25,7 @@
 		httpRequest.onload = updatePage();
 		httpRequest.onerror = loadError();
 		function updatePage() {
-			var result = JSON.Parse(httpRequest.responseText);
+			var result = JSON.parse(httpRequest.responseText);
 			alert(result);
 			requestDocument();
 		}
