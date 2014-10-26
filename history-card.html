@@ -22,7 +22,7 @@
         vAxis: {title: result['data'][energyType]['live']['nativeUnit'], minValue: 0},
         legend: 'none'
       };
-      document.querySelector("history-card").shadowRoot.getElementById("title").innerHTML = "Historical " + energyType + " Usage";
+      document.querySelector("history-card").shadowRoot.getElementById("title").innerHTML = "Historical " + energyType.capitalize)( + " Usage";
       var chart = new google.visualization.AreaChart(document.querySelector("history-card").shadowRoot.getElementById("history-chart"));
       chart.draw(data, options);
     }
