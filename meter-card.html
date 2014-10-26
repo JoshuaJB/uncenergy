@@ -16,7 +16,7 @@
         legend: 'none',
         pieSliceText: 'none',
         pieHole: 0.5,
-        pieStartAngle: -90-45,
+        pieStartAngle: -135,
         tooltip: { trigger: 'none' },
         slices: {
           0: { color: 'red' },
@@ -24,12 +24,12 @@
           2: { color: 'transparent' },
         }
       };
+      alert("drawing");
       document.querySelector("meter-card").shadowRoot.getElementById("amount").innerHTML = buildingPower;
       document.querySelector("meter-card").shadowRoot.getElementById("units").innerHTML = buildingUnits;
       document.querySelector("meter-card").shadowRoot.getElementById("building").innerHTML = buildingName;
       var chart = new google.visualization.PieChart(document.querySelector("meter-card").shadowRoot.getElementById('piechart'));
       chart.draw(data, options);
-      setTimeout(function(){drawChart()}, 1000);
     }
     </script>
     <style>

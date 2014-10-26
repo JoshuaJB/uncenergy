@@ -4,8 +4,8 @@
   <template>
     <script type="text/javascript">
     google.load('visualization', '1', {'packages':['corechart']});
-    google.setOnLoadCallback(drawChart);
-    function drawChart() {
+    google.setOnLoadCallback(drawHistory);
+    function drawHistory() {
       var data = google.visualization.arrayToDataTable([
         [HistoryType(), Units()],
         ['1', 200],
@@ -20,7 +20,7 @@
       };
       var chart = new google.visualization.AreaChart(document.querySelector("history-card").shadowRoot.getElementById("history-chart"));
       chart.draw(data, options);
-      setTimeout(function(){drawChart()}, 1000);
+      setTimeout(function(){drawHistory()}, 1000);
     }
     function HistoryType() {
       return "Month";

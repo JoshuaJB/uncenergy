@@ -35,6 +35,7 @@
 			buildingPowerPercent = 100 * buildingPower / result['data']['electricity']['live']['maxRange'];
 			buildingName = result['name'];
 			buildingUnits = result['data']['electricity']['live']['unit'];
+			drawChart();
 			requestDocument();
 		}
 		function loadError() {
