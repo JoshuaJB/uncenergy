@@ -32,7 +32,7 @@
 		function updatePage() {
 			result = JSON.parse(httpRequest.responseText);
 			drawChart();
-			setTimeout(function(){requestDocument();}, 1000);
+			setTimeout(function(){requestDocument();}, 1500);
 		}
 		function loadError() {
 			document.querySelector('#ajaxError').show();

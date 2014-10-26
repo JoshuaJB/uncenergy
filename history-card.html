@@ -3,13 +3,12 @@
 <polymer-element name="history-card">
   <template>
     <script type="text/javascript">
-    google.load('visualization', '1', {'packages':['corechart']});
     google.setOnLoadCallback(drawHistory);
     function drawHistory() {
       if (!result) //|| !result['data'][energyType][')
         return;
       var data = google.visualization.arrayToDataTable([
-        ["Day", result['data'][energyType]['live']['unit'],
+        ["Day", result['data'][energyType]['live']['unit']],
         ['1', 200],
         ['2', 210],
         ['3', 230],
