@@ -1,7 +1,7 @@
 <?php
 
 // Empty fallthrough response
-$response = jason_encode("{}");
+$response = json_encode("{}");
 
 switch(array_keys($_REQUEST)[0])
 {
