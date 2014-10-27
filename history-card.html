@@ -3,9 +3,8 @@
 <polymer-element name="history-card">
   <template>
     <script type="text/javascript">
-    google.setOnLoadCallback(drawHistory);
     function drawHistory() {
-      if (!result || !result['data'][energyType][historyType])
+      if (!chartsReady || result == {} || !result['data'][energyType][historyType])
         return;
       var data = google.visualization.arrayToDataTable(generateHistory());
       var options = {

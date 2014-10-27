@@ -3,9 +3,8 @@
 <polymer-element name="meter-card">
   <template>
     <script type="text/javascript">
-    google.setOnLoadCallback(drawChart);
     function drawChart() {
-      if (!result || !result['data'][energyType]['live'])
+      if (!chartsReady || result == {} || !result['data'][energyType]['live'])
         return;
       var data = google.visualization.arrayToDataTable([
         ['Amount', 'Percentage'],

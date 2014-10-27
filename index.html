@@ -12,7 +12,7 @@
 	<link rel="import" href="/components/core-header-panel/core-header-panel.html">
 	<link rel="import" href="/components/core-toolbar/core-toolbar.html">
 	<link rel="import" href="/components/paper-tabs/paper-tabs.html">
-	<link rel="import" href="components/paper-elements/paper-elements.html">
+	<link rel="import" href="/components/paper-elements/paper-elements.html">
 	<link rel="import" href="/components/core-menu/core-menu.html">
 	<link rel="import" href="/components/core-item/core-item.html">
 	<link rel="import" href="/components/core-scaffold/core-scaffold.html">
@@ -20,17 +20,23 @@
 	<link rel="import" href="/history-card.html">
 	<script>
 		google.load('visualization', '1', {'packages':['corechart']});
-	</script>
-	<script>
+		var chartsReady = false;
 		var currentBuilding = '113';
 		var httpRequest = new XMLHttpRequest();
 		var energyType = 'electricity';
 		var historyType = 'daily';
-		var result;
+		var result = {};
 		httpRequest.addEventListener("load", updatePage, false);
 		httpRequest.addEventListener("error", loadError, false);
-		requestDocument();
+		document.addEventListener("DOMContentLoaded", requestDocument, false);
+		google.setOnLoadCallback(function(){chartsReady = true});
+
 		function updatePage() {
+			// Make sure we only load an actual response
+			if (httpRequest.responseText.indexOf("<") != -1) {
+				loadError();
+				return;
+			}
 			result = JSON.parse(httpRequest.responseText);
 			drawChart();
 			drawHistory();
@@ -40,7 +46,7 @@
 			document.querySelector('#ajaxError').show();
 		}
 		function requestDocument() {
-			httpRequest.open('GET', 'http://uncenergy.me/api.php?building=' + currentBuilding, true);
+			httpRequest.open('GET', '/api.php?building=' + currentBuilding);
 			httpRequest.send();
 		}
 		String.prototype.capitalize = function() {
@@ -106,7 +112,7 @@
 		</history-card>
 	</div>
 	<paper-toast id="ajaxError" role="alert" text="There was an error getting data from the server.">
-		<div style="color: #eeff41;" onclick="requestDocument">Retry</div>
+		<div style="color: #eeff41;" onclick="requestDocument()">Retry</div>
 	</paper-toast>
 	<script>
 	var tabs = document.querySelector('core-menu');
