@@ -1,39 +1,42 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 
 <head>
 	<title>UNC Energy Dashboard</title>
+	<link rel="icon" type="image/png" href="/dashboard-alpha-notext.png">
 
 	<meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
 	<script src="/components/webcomponentsjs/webcomponents.js"></script>
 	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
-	<link rel="import" href="/components/font-roboto/roboto.html">
+	<link rel="import" href="/components/core-scaffold/core-scaffold.html">
 	<link rel="import" href="/components/core-header-panel/core-header-panel.html">
 	<link rel="import" href="/components/core-toolbar/core-toolbar.html">
-	<link rel="import" href="/components/paper-tabs/paper-tabs.html">
-	<link rel="import" href="/components/paper-elements/paper-elements.html">
 	<link rel="import" href="/components/core-menu/core-menu.html">
 	<link rel="import" href="/components/core-item/core-item.html">
-	<link rel="import" href="/components/core-scaffold/core-scaffold.html">
+	<link rel="import" href="/components/paper-dropdown-menu/paper-dropdown-menu.html">
+	<link rel="import" href="/components/paper-toast/paper-toast.html">
 	<link rel="import" href="/meter-card.html">
 	<link rel="import" href="/history-card.html">
+	<link rel="import" href="/components/font-roboto/roboto.html">
 	<script>
 		google.load('visualization', '1', {'packages':['corechart']});
+		google.setOnLoadCallback(function(){chartsReady = true});
 		var chartsReady = false;
 		var currentBuilding = '113';
-		var httpRequest = new XMLHttpRequest();
 		var energyType = 'electricity';
 		var historyType = 'daily';
 		var result = {};
+		var httpRequest = new XMLHttpRequest();
+
 		httpRequest.addEventListener("load", updatePage, false);
 		httpRequest.addEventListener("error", loadError, false);
-		document.addEventListener("DOMContentLoaded", requestDocument, false);
-		google.setOnLoadCallback(function(){chartsReady = true});
+		// Everything has to load before we use polymer
+		document.addEventListener("load", requestDocument, false);
 
 		function updatePage() {
 			// Make sure we only load an actual response
-			if (httpRequest.responseText.indexOf("<") != -1) {
+			if (httpRequest.responseText.indexOf("\<") != -1) {
 				loadError();
 				return;
 			}
