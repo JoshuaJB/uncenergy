@@ -2,7 +2,8 @@
 
 <polymer-element name="meter-card">
   <template>
-    <script type="text/javascript">
+    <script type="text/javascript">/*
+alert("meter-card!!");
     function drawChart() {
       if (!chartsReady || result == {} || !result['data'][energyType]['live'])
         return;
@@ -33,7 +34,7 @@
     }
     function buildingPowerPercent() {
       return 100 * result['data'][energyType]['live']['amount'] / result['data'][energyType]['live']['maxRange'];
-    }
+    }*/
     </script>
     <style>
     :host {
@@ -73,7 +74,7 @@
       width: 100%;
       text-align:center;
     }
-    #piechart {
+    #livechart {
       position:relative;
       width:400px;
       height:400px;
@@ -90,7 +91,7 @@
     </style>
     <paper-shadow z="3"></paper-shadow>
     <div class="card-header" layout horizontal center>
-      <div id="piechart"></div>
+      <div id="livechart"></div>
       <p id="title"></p>
       <p id="amount"></p>
       <p id="units"></p>

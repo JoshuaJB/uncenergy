@@ -3,11 +3,12 @@
 
 <head>
 	<title>UNC Energy Dashboard</title>
-	<link rel="icon" type="image/png" href="/dashboard-alpha-notext.png">
+	<link rel="icon" type="image/png" href="/images/dashboard.png">
 
 	<meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
 	<script src="/components/webcomponentsjs/webcomponents.js"></script>
 	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+	<script type="text/javascript" src="/js/main.js"></script>
 
 	<link rel="import" href="/components/core-scaffold/core-scaffold.html">
 	<link rel="import" href="/components/core-header-panel/core-header-panel.html">
@@ -19,43 +20,7 @@
 	<link rel="import" href="/meter-card.html">
 	<link rel="import" href="/history-card.html">
 	<link rel="import" href="/components/font-roboto/roboto.html">
-	<script>
-		google.load('visualization', '1', {'packages':['corechart']});
-		google.setOnLoadCallback(function(){chartsReady = true});
-		var chartsReady = false;
-		var currentBuilding = '113';
-		var energyType = 'electricity';
-		var historyType = 'daily';
-		var result = {};
-		var httpRequest = new XMLHttpRequest();
 
-		httpRequest.addEventListener("load", updatePage, false);
-		httpRequest.addEventListener("error", loadError, false);
-		// Everything has to load before we use polymer
-		document.addEventListener("load", requestDocument, false);
-
-		function updatePage() {
-			// Make sure we only load an actual response
-			if (httpRequest.responseText.indexOf("\<") != -1) {
-				loadError();
-				return;
-			}
-			result = JSON.parse(httpRequest.responseText);
-			drawChart();
-			drawHistory();
-			setTimeout(function(){requestDocument();}, 2000);
-		}
-		function loadError() {
-			document.querySelector('#ajaxError').show();
-		}
-		function requestDocument() {
-			httpRequest.open('GET', '/api.php?building=' + currentBuilding);
-			httpRequest.send();
-		}
-		String.prototype.capitalize = function() {
-			return this.charAt(0).toUpperCase() + this.slice(1);
-		}
-	</script>
 	<style>
 	html,body {
 		height: 100%;
@@ -115,15 +80,15 @@
 		</history-card>
 	</div>
 	<paper-toast id="ajaxError" role="alert" text="There was an error getting data from the server.">
-		<div style="color: #eeff41;" onclick="requestDocument()">Retry</div>
+		<div style="color: #eeff41;" onclick="updatePage()">Retry</div>
 	</paper-toast>
 	<script>
 	var tabs = document.querySelector('core-menu');
 	tabs.addEventListener('core-select', function() {
 		currentBuilding = tabs.children[tabs.selected].id;
-		requestDocument();
+		updatePage();
 	});
-</script>
+	</script>
 </core-scaffold>
 </body>
 

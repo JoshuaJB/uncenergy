@@ -2,7 +2,7 @@
 
 <polymer-element name="history-card">
   <template>
-    <script type="text/javascript">
+    <script type="text/javascript">/*
     function drawHistory() {
       if (!chartsReady || result == {} || !result['data'][energyType][historyType])
         return;
@@ -59,7 +59,7 @@
         history.push(['', Number(result['data'][energyType][historyType]['previous'][i]['amount'])]);
 
       return history;
-    }
+    }*/
     </script>
     <style>
     :host {
@@ -75,7 +75,7 @@
     .card-header {
       margin-bottom: 10px;
     }
-    #history-chart {
+    #historygraph {
       position:relative;
       width:400px;
       height:400px;
@@ -104,7 +104,7 @@
     </style>
     <paper-shadow z="3"></paper-shadow>
     <div class="card-header" layout horizontal center>
-      <div id="history-chart"></div>
+      <div id="historygraph"></div>
       <p id="title"></p>
       <p id="building"></p>
       <paper-dropdown-menu id="historySel" selected="24 Hours" valueattr="label">
@@ -118,7 +118,7 @@
     var drops = document.querySelector("history-card").shadowRoot.querySelector('paper-dropdown-menu');
     drops.addEventListener('core-select', function() {
       historyType = historyString(this.selected);
-      requestDocument();
+      updatePage();
     });
     </script>
   </template>
