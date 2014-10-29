@@ -39,7 +39,7 @@ function forceUpdate()
 function updateLiveData()
 {
 	updateLiveChart(document.querySelector("meter-card").shadowRoot, currentBuilding);
-	setTimeout(updateLiveData, 200000);
+	setTimeout(updateLiveData, 5000);
 }
 function updateHistoricalData()
 {
