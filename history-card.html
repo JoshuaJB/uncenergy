@@ -2,65 +2,6 @@
 
 <polymer-element name="history-card">
   <template>
-    <script type="text/javascript">/*
-    function drawHistory() {
-      if (!chartsReady || result == {} || !result['data'][energyType][historyType])
-        return;
-      var data = google.visualization.arrayToDataTable(generateHistory());
-      var options = {
-        vAxis: {title: result['data'][energyType]['live']['nativeUnit'], minValue: 0},
-        legend: 'none'
-      };
-      document.querySelector("history-card").shadowRoot.getElementById("title").innerHTML = "Historical " + energyType.capitalize() + " Usage";
-      var chart = new google.visualization.AreaChart(document.querySelector("history-card").shadowRoot.getElementById("history-chart"));
-      chart.draw(data, options);
-    }
-    function historyTypeString() {
-      switch (historyType)
-      {
-      case 'daily':
-        return '24 Hours';
-      case 'monthly':
-        return '30 Days';
-      case 'weekly':
-        return '7 Days';
-      case 'yearly':
-        return '10 Years';
-      }
-    }
-    function historyString(input) {
-      switch (input)
-      {
-      case '24 Hours':
-        return 'daily';
-      case '30 Days':
-        return 'monthly';
-      case '7 Days':
-        return 'weekly';
-      case '10 Years':
-        return 'yearly';
-      }
-    }
-    function generateHistory() {
-      var iterations = 0;
-      var history = [];
-
-      if (historyType == 'daily')
-        iterations = 24;
-      else if (historyType == 'weekly')
-        iterations = 7;
-      else if (historyType == 'monthly')
-        iterations = 30;
-      else if (historyType == 'yearly')
-        iterations = 10;
-      history.push(["", result['data'][energyType]['live']['nativeUnit']]);
-
-      for (var i = 0; i < iterations; i++)
-        history.push(['', Number(result['data'][energyType][historyType]['previous'][i]['amount'])]);
-
-      return history;
-    }*/
-    </script>
     <style>
     :host {
       display: block;
@@ -83,7 +24,8 @@
     #title {
       margin-top: 20px;
       width: 100%;
-      left: 0;
+      left: 0px;
+      top:0px;
       color: black;
       font-size: 28px;
       text-align:center;
@@ -118,7 +60,7 @@
     var drops = document.querySelector("history-card").shadowRoot.querySelector('paper-dropdown-menu');
     drops.addEventListener('core-select', function() {
       historyType = historyString(this.selected);
-      updatePage();
+      forceUpdate();
     });
     </script>
   </template>

@@ -17,6 +17,7 @@
 	<link rel="import" href="/components/core-item/core-item.html">
 	<link rel="import" href="/components/paper-dropdown-menu/paper-dropdown-menu.html">
 	<link rel="import" href="/components/paper-toast/paper-toast.html">
+	<link rel="import" href="/components/paper-elements/paper-elements.html">
 	<link rel="import" href="/meter-card.html">
 	<link rel="import" href="/history-card.html">
 	<link rel="import" href="/components/font-roboto/roboto.html">
@@ -80,13 +81,13 @@
 		</history-card>
 	</div>
 	<paper-toast id="ajaxError" role="alert" text="There was an error getting data from the server.">
-		<div style="color: #eeff41;" onclick="updatePage()">Retry</div>
+		<div style="color: #eeff41;" onclick="forceUpdate()">Retry</div>
 	</paper-toast>
 	<script>
 	var tabs = document.querySelector('core-menu');
 	tabs.addEventListener('core-select', function() {
 		currentBuilding = tabs.children[tabs.selected].id;
-		updatePage();
+		forceUpdate();
 	});
 	</script>
 </core-scaffold>
