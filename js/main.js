@@ -47,12 +47,14 @@ function forceUpdate()
 function updateLiveData()
 {
 	updateLiveChart(document.querySelector("meter-card").shadowRoot, currentBuilding);
-	setTimeout(updateLiveData, 5000);
+	delete liveTimeout;
+	liveTimeout = setTimeout(updateLiveData, 5000);
 }
 function updateHistoricalData()
 {
 	updateHistoryGraph(document.querySelector("history-card").shadowRoot, currentBuilding);
-	setTimeout(updateHistoricalData, 1000*60*60);
+	delete historyTimeout;
+	historyTimeout = setTimeout(updateHistoricalData, 1000*60*60);
 }
 
 /*
