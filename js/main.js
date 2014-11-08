@@ -63,7 +63,7 @@ function showError(message)
 	try
 	{
 		var elem = document.querySelector('#ajaxError');
-		elem.innerHTML = message;
+		elem.text = message;
 		elem.show();
 	}
 	catch (error){;}
@@ -101,7 +101,7 @@ function drawLiveChart(jsonResult, livecard, buildingName)
 	// Validate
 	if (jsonResult == {} || !jsonResult[energyType])
 	{
-		loadError();
+		showError("Invalid live data");
 		return;
 	}
 
@@ -132,8 +132,11 @@ function drawLiveChart(jsonResult, livecard, buildingName)
 }
 function drawHistoryGraph(jsonResult, historycard)
 {
-	if (jsonResult == {} || !jsonResult['data'][energyType][historyType])
+	if (jsonResult == {} || !jsonResult['data'][energyType][historyType]['previous'])
+	{
+		showError("Invalid historical data");
 		return;
+	}
 
 	var data = google.visualization.arrayToDataTable(generateHistory(jsonResult));
 	var options = {
