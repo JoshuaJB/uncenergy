@@ -34,7 +34,7 @@ function JSONHttpRequest(URL, loadCallback, errorCallback)
 	this.httpRequest = new XMLHttpRequest();
 	this.httpRequest.addEventListener("load",
 										function() {
-											this.onRequestComplete;
+											this.onRequestComplete();
 											delete jsonRequestQueue.shift();
 										},
 										false);
@@ -50,12 +50,14 @@ function JSONHttpRequest(URL, loadCallback, errorCallback)
 }
 
 // Everything has to load before we use polymer
-document.addEventListener("load", forceUpdate, false);
+document.addEventListener("load", forceUpdate, false);j
 
 function forceUpdate()
 {
-	if (!chartsLoaded)
+	if (!chartsLoaded) {
 		setTimeout(forceUpdate, 100);
+		return;
+	}
 	updateLiveData();
 	updateHistoricalData();
 }
