@@ -3,7 +3,6 @@ google.load('visualization', '1', {'packages':['corechart']});
 google.setOnLoadCallback(forceUpdate);
 
 var currentBuilding = '113';
-var energyType = 'electricity';
 var historyType = 'daily';
 var buildingNameMap = {};
 
@@ -46,13 +45,17 @@ function forceUpdate()
 }
 function updateLiveData()
 {
-	updateLiveChart(document.querySelector("meter-card").shadowRoot, currentBuilding);
+	updateLiveChart(document.querySelectorAll("meter-card")[0].shadowRoot, currentBuilding, 'electricity');
+	updateLiveChart(document.querySelectorAll("meter-card")[1].shadowRoot, currentBuilding, 'heating');
+	updateLiveChart(document.querySelectorAll("meter-card")[2].shadowRoot, currentBuilding, 'cooling');
 	delete liveTimeout;
 	liveTimeout = setTimeout(updateLiveData, 5000);
 }
 function updateHistoricalData()
 {
-	updateHistoryGraph(document.querySelector("history-card").shadowRoot, currentBuilding);
+	updateHistoryGraph(document.querySelectorAll("history-card")[0].shadowRoot, currentBuilding, 'electricity');
+	updateHistoryGraph(document.querySelectorAll("history-card")[1].shadowRoot, currentBuilding, 'heating');
+	updateHistoryGraph(document.querySelectorAll("history-card")[2].shadowRoot, currentBuilding, 'cooling');
 	delete historyTimeout;
 	historyTimeout = setTimeout(updateHistoricalData, 1000*60*60);
 }
@@ -73,26 +76,26 @@ function showError(message)
 String.prototype.capitalize = function() {
 	return this.charAt(0).toUpperCase() + this.slice(1);
 }
-function updateLiveChart(livecard, buildingID)
+function updateLiveChart(livecard, buildingID, energyType)
 {
 	var name = buildingNameMap[buildingID];
 	// Request data
 	new JSONHttpRequest(
 		'api.php?building=' + buildingID + '&live=true',
-		function (result) {drawLiveChart(result, livecard, name);},
+		function (result) {drawLiveChart(result, livecard, name, energyType);},
 		showError
 	);
 }
-function updateHistoryGraph(livecard, buildingID)
+function updateHistoryGraph(livecard, buildingID, energyType)
 {
 	// Request data
 	new JSONHttpRequest(
 		'api.php?building=' + buildingID,
-		function (result) {drawHistoryGraph(result, livecard);},
+		function (result) {drawHistoryGraph(result, livecard, energyType);},
 		showError
 	);
 }
-function drawLiveChart(jsonResult, livecard, buildingName)
+function drawLiveChart(jsonResult, livecard, buildingName, energyType)
 {
 	// Helper Functions
 	function buildingPowerPercent()
@@ -132,7 +135,7 @@ function drawLiveChart(jsonResult, livecard, buildingName)
 	var chart = new google.visualization.PieChart(livecard.getElementById('livechart'));
 	chart.draw(data, options);
 }
-function drawHistoryGraph(jsonResult, historycard)
+function drawHistoryGraph(jsonResult, historycard, energyType)
 {
 	if (jsonResult == {} || !jsonResult['data'][energyType][historyType]['previous'])
 	{
