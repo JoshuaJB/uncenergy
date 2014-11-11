@@ -34,13 +34,13 @@ function JSONHttpRequest(URL, loadCallback, errorCallback)
 	this.httpRequest = new XMLHttpRequest();
 	this.httpRequest.addEventListener("load",
 										function() {
-											this.onRequestComplete();
+											_this.onRequestComplete();
 											delete jsonRequestQueue.shift();
 										},
 										false);
 	this.httpRequest.addEventListener("error",
 										function() {
-											this.errorCallback("Unable to access the server.");
+											_this.errorCallback("Unable to access the server.");
 											delete jsonRequestQueue.shift();
 										},
 										false);
@@ -50,7 +50,7 @@ function JSONHttpRequest(URL, loadCallback, errorCallback)
 }
 
 // Everything has to load before we use polymer
-document.addEventListener("load", forceUpdate, false);j
+document.addEventListener("load", forceUpdate, false);
 
 function forceUpdate()
 {
