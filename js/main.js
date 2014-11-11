@@ -1,10 +1,12 @@
 // Load charts
 google.load('visualization', '1', {'packages':['corechart']});
-google.setOnLoadCallback(forceUpdate);
+google.setOnLoadCallback(function(){chartsLoaded = true;});
 
 var currentBuilding = '113';
 var historyType = 'daily';
 var buildingNameMap = {};
+var chartsLoaded = false;
+var jsonRequestQueue = [];
 
 new JSONHttpRequest('/buildingmap.json',
 					function(result) {buildingNameMap = result;},
@@ -14,6 +16,7 @@ new JSONHttpRequest('/buildingmap.json',
 function JSONHttpRequest(URL, loadCallback, errorCallback)
 {
 	var _this = this;
+	this.URL = URL;
 	this.loadCallback = loadCallback;
 	this.errorCallback = errorCallback;
 	this.onRequestComplete = function () {
@@ -29,10 +32,21 @@ function JSONHttpRequest(URL, loadCallback, errorCallback)
 		_this.loadCallback(response);
 	};
 	this.httpRequest = new XMLHttpRequest();
-	this.httpRequest.addEventListener("load", this.onRequestComplete, false);
-	this.httpRequest.addEventListener("error", function(){this.errorCallback("Unable to access the server.");}, false);
+	this.httpRequest.addEventListener("load",
+										function() {
+											this.onRequestComplete;
+											delete jsonRequestQueue.shift();
+										},
+										false);
+	this.httpRequest.addEventListener("error",
+										function() {
+											this.errorCallback("Unable to access the server.");
+											delete jsonRequestQueue.shift();
+										},
+										false);
 	this.httpRequest.open('GET', URL);
 	this.httpRequest.send();
+	jsonRequestQueue.push(this);
 }
 
 // Everything has to load before we use polymer
@@ -40,6 +54,8 @@ document.addEventListener("load", forceUpdate, false);
 
 function forceUpdate()
 {
+	if (!chartsLoaded)
+		setTimeout(forceUpdate, 100);
 	updateLiveData();
 	updateHistoricalData();
 }
@@ -80,7 +96,7 @@ function updateLiveChart(livecard, buildingID, energyType)
 {
 	var name = buildingNameMap[buildingID];
 	// Request data
-	new JSONHttpRequest(
+	var request = new JSONHttpRequest(
 		'api.php?building=' + buildingID + '&live=true',
 		function (result) {drawLiveChart(result, livecard, name, energyType);},
 		showError
@@ -89,7 +105,7 @@ function updateLiveChart(livecard, buildingID, energyType)
 function updateHistoryGraph(livecard, buildingID, energyType)
 {
 	// Request data
-	new JSONHttpRequest(
+	var request = new JSONHttpRequest(
 		'api.php?building=' + buildingID,
 		function (result) {drawHistoryGraph(result, livecard, energyType);},
 		showError
@@ -196,5 +212,12 @@ function generateHistory(jsonResult, energyType) {
 		history.push(['', Number(jsonResult['data'][energyType][historyType]['previous'][i]['amount'])]);
 
 	return history;
+}
+
+function changeBuilding(newID) {
+	while (jsonRequestQueue.length > 0)
+		delete jsonRequestQueue.pop();
+	currentBuilding = newID;
+	forceUpdate();
 }
 
