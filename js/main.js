@@ -143,7 +143,7 @@ function drawHistoryGraph(jsonResult, historycard, energyType)
 		return;
 	}
 
-	var data = google.visualization.arrayToDataTable(generateHistory(jsonResult));
+	var data = google.visualization.arrayToDataTable(generateHistory(jsonResult, energyType));
 	var options = {
 		vAxis: {title: jsonResult['data'][energyType]['live']['nativeUnit'], minValue: 0},
 		legend: 'none'
@@ -178,7 +178,7 @@ function historyString(input) {
 		return 'yearly';
 	}
 }
-function generateHistory(jsonResult) {
+function generateHistory(jsonResult, energyType) {
 	var iterations = 0;
 	var history = [];
 
