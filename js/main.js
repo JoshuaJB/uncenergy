@@ -130,7 +130,7 @@ function drawLiveChart(jsonResult, livecard, buildingName, energyType)
 	}
 	else
 	{
-		livecard.style.display = "block";
+		livecard.host.style.display = "block";
 	}
 
 	var data = google.visualization.arrayToDataTable([
