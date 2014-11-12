@@ -122,9 +122,9 @@ function drawLiveChart(jsonResult, livecard, buildingName, energyType)
 	}
 
 	// Validate
-	if (jsonResult == {} || !jsonResult[energyType])
+	if (jsonResult == {} || !jsonResult[energyType] || !jsonResult[energyType]['live'])
 	{
-		showError("Invalid live data");
+		showError("Invalid live " + energyType + " data");
 		return;
 	}
 
@@ -155,13 +155,20 @@ function drawLiveChart(jsonResult, livecard, buildingName, energyType)
 }
 function drawHistoryGraph(jsonResult, historycard, energyType)
 {
-	if (jsonResult == {} || !jsonResult['data'][energyType][historyType]['previous'])
+	var history;
+	if (jsonResult == {} || !jsonResult['data'][energyType][historyType]['previous'] || jsonResult['data'][energyType]['live'] == null)
 	{
-		showError("Invalid historical data");
-		return;
+		showError("Invalid historical " + energyType + " data");
+		history = {["",""], [0, 0]};
+		historycard.display = "none";
+	}
+	else
+	{
+		history = generateHistory(jsonResult, energyType);
+		historycard.display = "block";
 	}
 
-	var data = google.visualization.arrayToDataTable(generateHistory(jsonResult, energyType));
+	var data = google.visualization.arrayToDataTable(history);
 	var options = {
 		vAxis: {title: jsonResult['data'][energyType]['live']['nativeUnit'], minValue: 0},
 		legend: 'none'
