@@ -79,7 +79,7 @@ function updateHistoricalData()
 }
 
 /*
- * Displays a 
+ * Displays a small error popup
  */
 function showError(message)
 {
@@ -115,17 +115,22 @@ function updateHistoryGraph(livecard, buildingID, energyType)
 }
 function drawLiveChart(jsonResult, livecard, buildingName, energyType)
 {
-	// Helper Functions
+	// Helper Function
 	function buildingPowerPercent()
 	{
 		return 100 * jsonResult[energyType]['amount'] / jsonResult[energyType]['maxRange'];
 	}
 
 	// Validate
-	if (jsonResult == {} || !jsonResult[energyType] || !jsonResult[energyType]['live'])
+	if (jsonResult == {} || !jsonResult[energyType])
 	{
 		showError("Invalid live " + energyType + " data");
+		livecard.host.style.display = "none";
 		return;
+	}
+	else
+	{
+		livecard.style.display = "block";
 	}
 
 	var data = google.visualization.arrayToDataTable([
@@ -155,20 +160,18 @@ function drawLiveChart(jsonResult, livecard, buildingName, energyType)
 }
 function drawHistoryGraph(jsonResult, historycard, energyType)
 {
-	var history;
 	if (jsonResult == {} || !jsonResult['data'][energyType][historyType]['previous'] || jsonResult['data'][energyType]['live'] == null)
 	{
 		showError("Invalid historical " + energyType + " data");
-		history = {["",""], [0, 0]};
-		historycard.display = "none";
+		historycard.host.style.display = "none";
+		return;
 	}
 	else
 	{
-		history = generateHistory(jsonResult, energyType);
-		historycard.display = "block";
+		historycard.host.style.display = "block";
 	}
 
-	var data = google.visualization.arrayToDataTable(history);
+	var data = google.visualization.arrayToDataTable(generateHistory(jsonResult, energyType));
 	var options = {
 		vAxis: {title: jsonResult['data'][energyType]['live']['nativeUnit'], minValue: 0},
 		legend: 'none'
