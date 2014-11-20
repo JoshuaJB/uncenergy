@@ -7,6 +7,7 @@ var historyType = 'daily';
 var buildingNameMap = {};
 var chartsLoaded = false;
 var jsonRequestQueue = [];
+var liveTimeout = -1, historyTimeout = -1;
 
 new JSONHttpRequest('/buildingmap.json',
 					function(result) {buildingNameMap = result;},
@@ -22,7 +23,7 @@ function JSONHttpRequest(URL, loadCallback, errorCallback)
 	this.onRequestComplete = function () {
 		try
 		{
-			response = JSON.parse(_this.httpRequest.responseText);
+			var response = JSON.parse(_this.httpRequest.responseText);
 		}
 		catch(SyntaxError)
 		{
@@ -66,7 +67,8 @@ function updateLiveData()
 	updateLiveChart(document.querySelectorAll("meter-card")[0].shadowRoot, currentBuilding, 'electricity');
 	updateLiveChart(document.querySelectorAll("meter-card")[1].shadowRoot, currentBuilding, 'heating');
 	updateLiveChart(document.querySelectorAll("meter-card")[2].shadowRoot, currentBuilding, 'cooling');
-	delete liveTimeout;
+	if (liveTimeout != -1)
+		clearTimeout(liveTimeout);
 	liveTimeout = setTimeout(updateLiveData, 5000);
 }
 function updateHistoricalData()
@@ -74,7 +76,8 @@ function updateHistoricalData()
 	updateHistoryGraph(document.querySelectorAll("history-card")[0].shadowRoot, currentBuilding, 'electricity');
 	updateHistoryGraph(document.querySelectorAll("history-card")[1].shadowRoot, currentBuilding, 'heating');
 	updateHistoryGraph(document.querySelectorAll("history-card")[2].shadowRoot, currentBuilding, 'cooling');
-	delete historyTimeout;
+	if (historyTimeout != -1)
+		clearTimeout(historyTimeout);
 	historyTimeout = setTimeout(updateHistoricalData, 1000*60*60);
 }
 
@@ -228,7 +231,7 @@ function generateHistory(jsonResult, energyType) {
 
 function changeBuilding(newID) {
 	while (jsonRequestQueue.length > 0)
-		delete jsonRequestQueue.pop();
+		jsonRequestQueue.pop().httpRequest.abort();
 	currentBuilding = newID;
 	forceUpdate();
 }
