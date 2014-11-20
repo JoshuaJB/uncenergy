@@ -125,7 +125,13 @@ function drawLiveChart(jsonResult, livecard, buildingName, energyType)
 	}
 
 	// Validate
-	if (jsonResult == null || jsonResult == {} || !jsonResult[energyType])
+	if (jsonResult == null)
+	{
+		showError("No data avalible.");
+		livecard.host.style.display = "none";
+		return;
+	}
+	if (jsonResult == {} || !jsonResult[energyType])
 	{
 		showError("Invalid live " + energyType + " data");
 		livecard.host.style.display = "none";
@@ -163,6 +169,13 @@ function drawLiveChart(jsonResult, livecard, buildingName, energyType)
 }
 function drawHistoryGraph(jsonResult, historycard, energyType)
 {
+	// Validate
+	if (jsonResult == null)
+	{
+		showError("No data avalible.");
+		historycard.host.style.display = "none";
+		return;
+	}
 	if (jsonResult == {} || !jsonResult['data'][energyType][historyType]['previous'] || jsonResult['data'][energyType]['live'] == null)
 	{
 		showError("Invalid historical " + energyType + " data");
