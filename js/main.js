@@ -125,7 +125,7 @@ function drawLiveChart(jsonResult, livecard, buildingName, energyType)
 	}
 
 	// Validate
-	if (jsonResult == {} || !jsonResult[energyType])
+	if (jsonResult == null || jsonResult == {} || !jsonResult[energyType])
 	{
 		showError("Invalid live " + energyType + " data");
 		livecard.host.style.display = "none";
