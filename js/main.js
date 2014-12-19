@@ -119,10 +119,10 @@ function updateHistoryGraph(livecard, buildingID, energyType)
 function drawLiveChart(jsonResult, livecard, buildingName, energyType)
 {
 	// Helper Function
-	function buildingPowerPercent()
+	/*function buildingPowerPercent()
 	{
 		return 100 * jsonResult[energyType]['amount'] / jsonResult[energyType]['maxRange'];
-	}
+	}*/
 
 	// Validate
 	if (jsonResult == null)
@@ -142,6 +142,42 @@ function drawLiveChart(jsonResult, livecard, buildingName, energyType)
 		livecard.host.style.display = "block";
 	}
 
+    /* RENDER */
+	var ctx = livecard.getElementById('livechart').getContext("2d");
+	var graph = {};
+
+    // User Specs
+	graph.x = 150; // Center X
+	graph.y = 150; // Center Y
+	graph.d = 300; // Graph Diameter
+	graph.val = jsonResult[energyType]['amount'] / jsonResult[energyType]['maxRange']; // Current decimal value (0.0 - 1.0)
+
+    // Autogen
+	graph.r = graph.d / 2.0;
+	graph.start = 3 * Math.PI / 4.0;
+	graph.end = 9 * Math.PI / 4.0;
+	graph.valEnd = graph.start + graph.val * 3 * Math.PI / 2.0;
+
+    // Gray
+	ctx.beginPath();
+	ctx.strokeStyle = "#FFFFFF";
+	ctx.fillStyle = "#808080";
+	ctx.arc(graph.x, graph.y, graph.r, graph.start, graph.end);
+	ctx.arc(graph.x, graph.y, graph.r / 2.0, graph.end, graph.start, true);
+	ctx.lineTo(graph.x - graph.r * Math.sin(graph.start), graph.y + graph.r * Math.sin(graph.start));
+	ctx.fill();
+	ctx.stroke();
+
+    // Red
+	ctx.beginPath();
+	ctx.strokeStyle = "#FFFFFF";
+	ctx.fillStyle = "#FF0000";
+	ctx.arc(graph.x, graph.y, graph.r, graph.start, graph.valEnd);
+	ctx.arc(graph.x, graph.y, graph.r / 2.0, graph.valEnd, graph.start, true);
+	ctx.lineTo(graph.x - graph.r * Math.sin(Math.PI / 4.0), graph.y + graph.r * Math.sin(Math.PI / 4.0));
+	ctx.fill();
+	ctx.stroke();
+    /*
 	var data = google.visualization.arrayToDataTable([
 		['Amount', 'Percentage'],
 		['Use',		0.75 * buildingPowerPercent()],
@@ -165,7 +201,7 @@ function drawLiveChart(jsonResult, livecard, buildingName, energyType)
 	livecard.getElementById("building").innerHTML = buildingName;
 	livecard.getElementById("title").innerHTML = "Current " + energyType.capitalize() + " Usage";
 	var chart = new google.visualization.PieChart(livecard.getElementById('livechart'));
-	chart.draw(data, options);
+	chart.draw(data, options);*/
 }
 function drawHistoryGraph(jsonResult, historycard, energyType)
 {
