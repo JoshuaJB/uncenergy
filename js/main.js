@@ -142,7 +142,7 @@ function drawLiveChart(jsonResult, livecard, buildingName, energyType)
     // User Specs
 	graph.x = 200; // Center X
 	graph.y = 200; // Center Y
-	graph.d = 300; // Graph Diameter
+	graph.d = 250; // Graph Diameter
 	graph.val = jsonResult[energyType]['amount'] / jsonResult[energyType]['maxRange']; // Current decimal value (0.0 - 1.0)
 
     // Autogen
