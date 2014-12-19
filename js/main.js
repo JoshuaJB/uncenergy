@@ -118,12 +118,6 @@ function updateHistoryGraph(livecard, buildingID, energyType)
 }
 function drawLiveChart(jsonResult, livecard, buildingName, energyType)
 {
-	// Helper Function
-	/*function buildingPowerPercent()
-	{
-		return 100 * jsonResult[energyType]['amount'] / jsonResult[energyType]['maxRange'];
-	}*/
-
 	// Validate
 	if (jsonResult == null)
 	{
@@ -142,7 +136,6 @@ function drawLiveChart(jsonResult, livecard, buildingName, energyType)
 		livecard.host.style.display = "block";
 	}
 
-    /* RENDER */
 	var ctx = livecard.getElementById('livechart').getContext("2d");
 	var graph = {};
 
@@ -177,31 +170,11 @@ function drawLiveChart(jsonResult, livecard, buildingName, energyType)
 	ctx.lineTo(graph.x - graph.r * Math.sin(Math.PI / 4.0), graph.y + graph.r * Math.sin(Math.PI / 4.0));
 	ctx.fill();
 	ctx.stroke();
-    /*
-	var data = google.visualization.arrayToDataTable([
-		['Amount', 'Percentage'],
-		['Use',		0.75 * buildingPowerPercent()],
-		['',		0.75 * (100 - buildingPowerPercent())],
-		['',		25]
-	]);
-	var options = {
-		legend: 'none',
-		pieSliceText: 'none',
-		pieHole: 0.5,
-		pieStartAngle: -135,
-		tooltip: {trigger: 'none'},
-		slices: {
-			0: {color: 'red'},
-			1: {color: 'grey'},
-			2: {color: 'transparent'},
-		}
-	};
+
+	// Fill
 	livecard.getElementById("amount").innerHTML = jsonResult[energyType]['amount'];
 	livecard.getElementById("units").innerHTML = jsonResult[energyType]['nativeUnit'];
 	livecard.getElementById("building").innerHTML = buildingName;
-	livecard.getElementById("title").innerHTML = "Current " + energyType.capitalize() + " Usage";
-	var chart = new google.visualization.PieChart(livecard.getElementById('livechart'));
-	chart.draw(data, options);*/
 }
 function drawHistoryGraph(jsonResult, historycard, energyType)
 {
