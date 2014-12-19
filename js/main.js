@@ -175,6 +175,7 @@ function drawLiveChart(jsonResult, livecard, buildingName, energyType)
 	livecard.getElementById("amount").innerHTML = jsonResult[energyType]['amount'];
 	livecard.getElementById("units").innerHTML = jsonResult[energyType]['nativeUnit'];
 	livecard.getElementById("building").innerHTML = buildingName;
+	livecard.getElementById("title").innerHTML = "Current " + energyType.capitalize() + " Usage";
 }
 function drawHistoryGraph(jsonResult, historycard, energyType)
 {
