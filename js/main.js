@@ -147,9 +147,9 @@ function drawLiveChart(jsonResult, livecard, buildingName, energyType)
 	var graph = {};
 
     // User Specs
-	graph.x = 150; // Center X
-	graph.y = 150; // Center Y
-	graph.d = 300; // Graph Diameter
+	graph.x = 200; // Center X
+	graph.y = 200; // Center Y
+	graph.d = 400; // Graph Diameter
 	graph.val = jsonResult[energyType]['amount'] / jsonResult[energyType]['maxRange']; // Current decimal value (0.0 - 1.0)
 
     // Autogen
