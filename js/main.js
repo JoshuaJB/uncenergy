@@ -244,7 +244,7 @@ function generateHistory(jsonResult, energyType) {
 			while (labels.length < 24) {
 				date.setHours(date.getHours() - 1);
 				labels.push(date.getHours());
-				history.push(Number(jsonResult['data'][energyType][historyType]['previous'][i]['amount']));
+				history.push(Number(jsonResult['data'][energyType][historyType]['previous'][labels.length - 1]['amount']));
 			}
 			break;
 		}
@@ -253,7 +253,7 @@ function generateHistory(jsonResult, energyType) {
 			while (labels.length < 7) {
 				date.setDate(date.getDate() - 1);
 				labels.push(days[date.getDay()]);
-				history.push(Number(jsonResult['data'][energyType][historyType]['previous'][i]['amount']));
+				history.push(Number(jsonResult['data'][energyType][historyType]['previous'][labels.length - 1]['amount']));
 			}
 			break;
 		}
@@ -261,7 +261,7 @@ function generateHistory(jsonResult, energyType) {
 			while (labels.length < 30) {
 				date.setDate(date.getDate() - 1);
 				labels.push(date.getDate());
-				history.push(Number(jsonResult['data'][energyType][historyType]['previous'][i]['amount']));
+				history.push(Number(jsonResult['data'][energyType][historyType]['previous'][labels.length - 1]['amount']));
 			}
 			break;
 		}
@@ -269,7 +269,7 @@ function generateHistory(jsonResult, energyType) {
 			while (labels.length < 10) {
 				date.setDate(date.getFullYear() - 1);
 				labels.push(date.getFullYear());
-				history.push(Number(jsonResult['data'][energyType][historyType]['previous'][i]['amount']));
+				history.push(Number(jsonResult['data'][energyType][historyType]['previous'][labels.length - 1]['amount']));
 			}
 			break;
 		}
