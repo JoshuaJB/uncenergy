@@ -1,7 +1,3 @@
-// Load charts
-google.load('visualization', '1', {'packages':['corechart']});
-google.setOnLoadCallback(function(){chartsLoaded = true;});
-
 var currentBuilding = '113';
 var historyType = 'daily';
 var buildingNameMap = {};
@@ -157,9 +153,10 @@ function drawLiveChart(jsonResult, livecard, buildingName, energyType)
 	ctx.fillStyle = "#808080";
 	ctx.arc(graph.x, graph.y, graph.r, graph.start, graph.end);
 	ctx.arc(graph.x, graph.y, graph.r / 2.0, graph.end, graph.start, true);
-	ctx.lineTo(graph.x - graph.r * Math.sin(graph.start), graph.y + graph.r * Math.sin(graph.start));
+	ctx.closePath();
 	ctx.fill();
 	ctx.stroke();
+	var c = document.getElementById("myCanvas2");
 
     // Red
 	ctx.beginPath();
@@ -167,7 +164,7 @@ function drawLiveChart(jsonResult, livecard, buildingName, energyType)
 	ctx.fillStyle = "#FF0000";
 	ctx.arc(graph.x, graph.y, graph.r, graph.start, graph.valEnd);
 	ctx.arc(graph.x, graph.y, graph.r / 2.0, graph.valEnd, graph.start, true);
-	ctx.lineTo(graph.x - graph.r * Math.sin(Math.PI / 4.0), graph.y + graph.r * Math.sin(Math.PI / 4.0));
+	ctx.closePath();
 	ctx.fill();
 	ctx.stroke();
 
@@ -186,25 +183,33 @@ function drawHistoryGraph(jsonResult, historycard, energyType)
 		historycard.host.style.display = "none";
 		return;
 	}
-	if (jsonResult == {} || !jsonResult['data'][energyType][historyType]['previous'] || jsonResult['data'][energyType]['live'] == null)
-	{
+	if (jsonResult == {} || !jsonResult['data'][energyType][historyType]['previous'] || jsonResult['data'][energyType]['live'] == null) {
 		showError("Invalid historical " + energyType + " data");
 		historycard.host.style.display = "none";
 		return;
 	}
-	else
-	{
+	else {
 		historycard.host.style.display = "block";
 	}
-
-	var data = google.visualization.arrayToDataTable(generateHistory(jsonResult, energyType));
-	var options = {
-		vAxis: {title: jsonResult['data'][energyType]['live']['nativeUnit'], minValue: 0},
-		legend: 'none'
+	var dataTable = generateHistory;
+	var ctx = historycard.getElementById("historygraph").getContext("2d");
+	var data = {
+		labels: dataTable[0],
+		datasets: [
+			{
+				label: energyType.capitalize(),
+				fillColor: "rgba(220,220,220,0.2)",
+				strokeColor: "rgba(220,220,220,1)",
+				pointColor: "rgba(220,220,220,1)",
+				pointStrokeColor: "#fff",
+				pointHighlightFill: "#fff",
+				pointHighlightStroke: "rgba(220,220,220,1)",
+				data: dataTable[1]
+			}
+		]
 	};
+	var historyGraph = new Chart(ctx).Line(data);
 	historycard.getElementById("title").innerHTML = "Historical " + energyType.capitalize() + " Usage";
-	var chart = new google.visualization.AreaChart(historycard.getElementById("historygraph"));
-	chart.draw(data, options);
 }
 function historyTypeString() {
 	switch (historyType)
@@ -233,23 +238,48 @@ function historyString(input) {
 	}
 }
 function generateHistory(jsonResult, energyType) {
-	var iterations = 0;
 	var history = [];
-
-	if (historyType == 'daily')
-		iterations = 24;
-	else if (historyType == 'weekly')
-		iterations = 7;
-	else if (historyType == 'monthly')
-		iterations = 30;
-	else if (historyType == 'yearly')
-		iterations = 10;
-	history.push(["", jsonResult['data'][energyType]['live']['nativeUnit']]);
-
-	for (var i = 0; i < iterations; i++)
-		history.push(['', Number(jsonResult['data'][energyType][historyType]['previous'][i]['amount'])]);
-
-	return history;
+	var labels = [];
+	var date = new Date();
+	switch (historyType) {
+		case 'daily': {
+			while (labels.length < 24) {
+				date.setHours(date.getHours() - 1);
+				labels.push(date.getHours());
+				history.push(Number(jsonResult['data'][energyType][historyType]['previous'][i]['amount']));
+			}
+			break;
+		}
+		case 'weekly': {
+			var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+			while (labels.length < 7) {
+				date.setDate(date.getDate() - 1);
+				labels.push(days[date.getDay()]);
+				history.push(Number(jsonResult['data'][energyType][historyType]['previous'][i]['amount']));
+			}
+			break;
+		}
+		case 'monthly': {
+			while (labels.length < 30) {
+				date.setDate(date.getDate() - 1);
+				labels.push(date.getDate());
+				history.push(Number(jsonResult['data'][energyType][historyType]['previous'][i]['amount']));
+			}
+			break;
+		}
+		case 'yearly': {
+			while (labels.length < 10) {
+				date.setDate(date.getFullYear() - 1);
+				labels.push(date.getFullYear());
+				history.push(Number(jsonResult['data'][energyType][historyType]['previous'][i]['amount']));
+			}
+			break;
+		}
+		default: {
+			showError("Invalid historyType.");
+		}
+	}
+	return [history, labels];
 }
 
 function changeBuilding(newID) {
