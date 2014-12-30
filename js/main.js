@@ -1,9 +1,9 @@
 var currentBuilding = '113';
 var historyType = 'daily';
 var buildingNameMap = {};
-var chartsLoaded = false;
 var jsonRequestQueue = [];
 var liveTimeout = -1, historyTimeout = -1;
+var historyGraphs = {'electricity':null, 'heating':null, 'cooling':null};
 
 new JSONHttpRequest('/buildingmap.json',
 					function(result) {buildingNameMap = result;},
@@ -51,10 +51,6 @@ document.addEventListener("load", forceUpdate, false);
 
 function forceUpdate()
 {
-	if (!chartsLoaded) {
-		setTimeout(forceUpdate, 100);
-		return;
-	}
 	updateLiveData();
 	updateHistoricalData();
 }
@@ -191,10 +187,10 @@ function drawHistoryGraph(jsonResult, historycard, energyType)
 	else {
 		historycard.host.style.display = "block";
 	}
-	var dataTable = generateHistory;
+	var dataTable = generateHistory(jsonResult, energyType);
 	var ctx = historycard.getElementById("historygraph").getContext("2d");
 	var data = {
-		labels: dataTable[0],
+		labels: dataTable[1],
 		datasets: [
 			{
 				label: energyType.capitalize(),
@@ -204,11 +200,13 @@ function drawHistoryGraph(jsonResult, historycard, energyType)
 				pointStrokeColor: "#fff",
 				pointHighlightFill: "#fff",
 				pointHighlightStroke: "rgba(220,220,220,1)",
-				data: dataTable[1]
+				data: dataTable[0]
 			}
 		]
 	};
-	var historyGraph = new Chart(ctx).Line(data);
+	if (historyGraphs[energyType] != null)
+		historyGraphs[energyType].destroy();
+	historyGraphs[energyType] = new Chart(ctx).Line(data);
 	historycard.getElementById("title").innerHTML = "Historical " + energyType.capitalize() + " Usage";
 }
 function historyTypeString() {
