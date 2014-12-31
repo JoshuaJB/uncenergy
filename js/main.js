@@ -242,7 +242,7 @@ function generateHistory(jsonResult, energyType) {
 	switch (historyType) {
 		case 'daily': {
 			while (labels.length < 24) {
-				history.push(Number(jsonResult['data'][energyType][historyType]['previous'][labels.length]['amount']));
+				history.push(Math.round(Number(jsonResult['data'][energyType][historyType]['previous'][labels.length]['amount'])));
 				date.setHours(date.getHours() - 1);
 				labels.push(date.getHours());
 			}
@@ -251,7 +251,7 @@ function generateHistory(jsonResult, energyType) {
 		case 'weekly': {
 			const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 			while (labels.length < 7) {
-				history.push(Number(jsonResult['data'][energyType][historyType]['previous'][labels.length]['amount']));
+				history.push(Math.round(Number(jsonResult['data'][energyType][historyType]['previous'][labels.length]['amount'])));
 				date.setDate(date.getDate() - 1);
 				labels.push(days[date.getDay()]);
 			}
@@ -259,7 +259,7 @@ function generateHistory(jsonResult, energyType) {
 		}
 		case 'monthly': {
 			while (labels.length < 30) {
-				history.push(Number(jsonResult['data'][energyType][historyType]['previous'][labels.length]['amount']));
+				history.push(Math.round(Number(jsonResult['data'][energyType][historyType]['previous'][labels.length]['amount'])));
 				date.setDate(date.getDate() - 1);
 				labels.push(date.getDate());
 			}
@@ -268,7 +268,7 @@ function generateHistory(jsonResult, energyType) {
 		case 'yearly': {
 			const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 			while (labels.length < 10) {
-				history.push(Number(jsonResult['data'][energyType][historyType]['previous'][labels.length]['amount']));
+				history.push(Math.round(Number(jsonResult['data'][energyType][historyType]['previous'][labels.length]['amount'])));
 				date.setDate(date.getMonth() - 1);
 				labels.push(months[date.getMonth()]);
 			}
