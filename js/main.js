@@ -219,7 +219,7 @@ function historyTypeString() {
 	case 'weekly':
 		return '7 Days';
 	case 'yearly':
-		return '10 Years';
+		return '10 Months';
 	}
 }
 function historyString(input) {
@@ -231,7 +231,7 @@ function historyString(input) {
 		return 'monthly';
 	case '7 Days':
 		return 'weekly';
-	case '10 Years':
+	case '10 Months':
 		return 'yearly';
 	}
 }
@@ -242,34 +242,35 @@ function generateHistory(jsonResult, energyType) {
 	switch (historyType) {
 		case 'daily': {
 			while (labels.length < 24) {
+				history.push(Number(jsonResult['data'][energyType][historyType]['previous'][labels.length]['amount']));
 				date.setHours(date.getHours() - 1);
 				labels.push(date.getHours());
-				history.push(Number(jsonResult['data'][energyType][historyType]['previous'][labels.length - 1]['amount']));
 			}
 			break;
 		}
 		case 'weekly': {
-			var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+			const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 			while (labels.length < 7) {
+				history.push(Number(jsonResult['data'][energyType][historyType]['previous'][labels.length]['amount']));
 				date.setDate(date.getDate() - 1);
 				labels.push(days[date.getDay()]);
-				history.push(Number(jsonResult['data'][energyType][historyType]['previous'][labels.length - 1]['amount']));
 			}
 			break;
 		}
 		case 'monthly': {
 			while (labels.length < 30) {
+				history.push(Number(jsonResult['data'][energyType][historyType]['previous'][labels.length]['amount']));
 				date.setDate(date.getDate() - 1);
 				labels.push(date.getDate());
-				history.push(Number(jsonResult['data'][energyType][historyType]['previous'][labels.length - 1]['amount']));
 			}
 			break;
 		}
 		case 'yearly': {
+			const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 			while (labels.length < 10) {
-				date.setDate(date.getFullYear() - 1);
-				labels.push(date.getFullYear());
-				history.push(Number(jsonResult['data'][energyType][historyType]['previous'][labels.length - 1]['amount']));
+				history.push(Number(jsonResult['data'][energyType][historyType]['previous'][labels.length]['amount']));
+				date.setDate(date.getMonth() - 1);
+				labels.push(months[date.getMonth()]);
 			}
 			break;
 		}
