@@ -289,19 +289,19 @@ function generateHistory(jsonResult, energyType) {
 				units = "Wh";
 				history[i] *= 1000;
 			case 'cooling':
-				if (n >= 1000) {
+				if (history[i] >= 1000) {
 					history[i] *= 0.001;
 					units = 'k' + units;
 				}
-				else if (n >= 1000000) {
+				else if (history[i] >= 1000000) {
 					history[i] *= 0.000001;
 					units = 'M' + units;
 				}
-				else if (n >= 1000000000) {
+				else if (history[i] >= 1000000000) {
 					history[i] *= 0.000000001;
 					units = 'G' + units;
 				}
-				else if (n >= 1000000000000) {
+				else if (history[i] >= 1000000000000) {
 					history[i] *= 0.000000000001;
 					units = 'T' + units;
 				}
