@@ -204,9 +204,12 @@ function drawHistoryGraph(jsonResult, historycard, energyType)
 			}
 		]
 	};
+	var options = {
+        scaleLabel : "<%= value + '" + dataTable[2] + "' %>"
+    };
 	if (historyGraphs[energyType] != null)
 		historyGraphs[energyType].destroy();
-	historyGraphs[energyType] = new Chart(ctx).Line(data);
+	historyGraphs[energyType] = new Chart(ctx).Line(data, options);
 	historycard.getElementById("title").innerHTML = "Historical " + energyType.capitalize() + " Usage";
 }
 function historyTypeString() {
@@ -269,7 +272,7 @@ function generateHistory(jsonResult, energyType) {
 			const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 			while (labels.length < 10) {
 				history.push(Math.round(Number(jsonResult['data'][energyType][historyType]['previous'][labels.length]['amount'])));
-				date.setDate(date.getMonth() - 1);
+				date.setMonth(date.getMonth() - 1);
 				labels.push(months[date.getMonth()]);
 			}
 			break;
@@ -278,7 +281,39 @@ function generateHistory(jsonResult, energyType) {
 			showError("Invalid historyType.");
 		}
 	}
-	return [history, labels];
+	var units = jsonResult['data'][energyType][historyType]['previous'][0]['unit'];
+	for (var i = 0; i < history.length; i++) {
+		switch (energyType) {
+			case 'electricity':
+				// Default units for electricity are kWh, but there in the possiblity for larger units (eg. MWh, GWh...) So adjust back to Wh first.
+				units = "Wh";
+				history[i] *= 1000;
+			case 'cooling':
+				if (n >= 1000) {
+					history[i] *= 0.001;
+					units = 'k' + units;
+				}
+				else if (n >= 1000000) {
+					history[i] *= 0.000001;
+					units = 'M' + units;
+				}
+				else if (n >= 1000000000) {
+					history[i] *= 0.000000001;
+					units = 'G' + units;
+				}
+				else if (n >= 1000000000000) {
+					history[i] *= 0.000000000001;
+					units = 'T' + units;
+				}
+				break;
+			case 'heating':
+				// Not sure about these units
+				break;
+			default:
+				showError("Unknown energy type");
+		}
+	}
+	return [history, labels, units];
 }
 
 function changeBuilding(newID) {
