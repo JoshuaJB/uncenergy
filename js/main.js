@@ -190,7 +190,7 @@ function drawHistoryGraph(jsonResult, historycard, energyType)
 		var dataTable = generateHistory(jsonResult, energyType);
 		historycard.host.style.display = "block";
 	}
-	catch(){
+	catch (e) {
 		showError("Invalid historical " + energyType + " data");
 		historycard.host.style.display = "none";
 		return;
