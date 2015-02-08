@@ -5,8 +5,6 @@ var jsonRequestQueue = [];
 var liveTimeout = -1, historyTimeout = -1;
 var historyGraphs = {'electricity':null, 'heating':null, 'cooling':null};
 
-showError("WARNING: UNC's servers are experiencing problems causing significant historical data innacuracies.");
-
 new JSONHttpRequest('/buildingmap.json',
 					function(result) {buildingNameMap = result;populateBuildings();},
 					function() {showError("Unable to load building list. Please refresh.");}
@@ -49,7 +47,10 @@ function JSONHttpRequest(URL, loadCallback, errorCallback)
 }
 
 // Everything has to load before we use polymer
-document.addEventListener("load", forceUpdate, false);
+document.addEventListener("load", function() {
+	forceUpdate();
+	showError("WARNING: UNC's servers are experiencing problems causing significant historical data innacuracies.");
+	}, false);
 
 function forceUpdate()
 {
