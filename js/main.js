@@ -323,3 +323,14 @@ function changeBuilding(newID) {
 	forceUpdate();
 }
 
+function populateBuildings() {
+	var currName;
+	var buildingList = document.querySelector('core-menu');
+	for (var element in buildingNameMap) {
+		console.log(element);
+		currName = document.createElement("core-item");
+		currName.innerHTML = buildingNameMap[element];
+		buildingList.appendChild(currName);
+	}
+}
+
