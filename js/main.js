@@ -186,15 +186,15 @@ function drawHistoryGraph(jsonResult, historycard, energyType)
 		historycard.host.style.display = "none";
 		return;
 	}
-	if (jsonResult == {} || !jsonResult['data'][energyType][historyType]['previous'] || jsonResult['data'][energyType][historyType]['previous'] != [] || jsonResult['data'][energyType]['live'] == null) {
+	try {
+		var dataTable = generateHistory(jsonResult, energyType);
+		historycard.host.style.display = "block";
+	}
+	catch(){
 		showError("Invalid historical " + energyType + " data");
 		historycard.host.style.display = "none";
 		return;
 	}
-	else {
-		historycard.host.style.display = "block";
-	}
-	var dataTable = generateHistory(jsonResult, energyType);
 	var ctx = historycard.getElementById("historygraph").getContext("2d");
 	var data = {
 		labels: dataTable[1],
