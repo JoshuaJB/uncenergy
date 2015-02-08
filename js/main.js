@@ -5,8 +5,10 @@ var jsonRequestQueue = [];
 var liveTimeout = -1, historyTimeout = -1;
 var historyGraphs = {'electricity':null, 'heating':null, 'cooling':null};
 
+showError("WARNING: UNC's servers are experiencing problems causing significant historical data innacuracies.");
+
 new JSONHttpRequest('/buildingmap.json',
-					function(result) {buildingNameMap = result;},
+					function(result) {buildingNameMap = result;populateBuildings();},
 					function() {showError("Unable to load building list. Please refresh.");}
 					);
 
@@ -170,6 +172,10 @@ function drawLiveChart(jsonResult, livecard, buildingName, energyType)
 	livecard.getElementById("building").innerHTML = buildingName;
 	livecard.getElementById("title").innerHTML = "Current " + energyType.capitalize() + " Usage";
 }
+/**
+ * WARNING: The history data is notoriously bad. This tries to show data from the previous year
+ * and may have significant mislabeling.
+ */
 function drawHistoryGraph(jsonResult, historycard, energyType)
 {
 	// Validate
@@ -326,10 +332,12 @@ function changeBuilding(newID) {
 function populateBuildings() {
 	var currName;
 	var buildingList = document.querySelector('core-menu');
-	for (var element in buildingNameMap) {
-		console.log(element);
+	for (var ID in buildingNameMap) {
+		// We have a few hand-picked demo buildings at the top, don't include them twice.
+		if (ID == "113" || ID == "104" || ID == "083" || ID == "086" || ID == "027")
+			continue;
 		currName = document.createElement("core-item");
-		currName.innerHTML = buildingNameMap[element];
+		currName.innerHTML = buildingNameMap[ID];
 		buildingList.appendChild(currName);
 	}
 }
