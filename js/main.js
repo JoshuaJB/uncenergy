@@ -337,7 +337,8 @@ function populateBuildings() {
 		if (ID == "113" || ID == "104" || ID == "083" || ID == "086" || ID == "027")
 			continue;
 		currName = document.createElement("core-item");
-		currName.innerHTML = buildingNameMap[ID];
+		currName.label = buildingNameMap[ID];
+		currName.id = ID;
 		buildingList.appendChild(currName);
 	}
 }
