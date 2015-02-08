@@ -324,7 +324,9 @@ function generateHistory(jsonResult, energyType) {
 }
 
 function changeBuilding(newID) {
-	document.getElementById("113").className = "";
+	// Reset initial selection on new selection
+	if (newID != "113")
+		document.getElementById("113").className = "";
 	while (jsonRequestQueue.length > 0)
 		jsonRequestQueue.pop().httpRequest.abort();
 	currentBuilding = newID;
