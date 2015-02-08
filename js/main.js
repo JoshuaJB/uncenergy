@@ -49,7 +49,7 @@ function JSONHttpRequest(URL, loadCallback, errorCallback)
 // Everything has to load before we use polymer
 document.addEventListener("load", function() {
 	forceUpdate();
-	showError("WARNING: UNC's servers are experiencing problems causing significant historical data innacuracies.");
+	setTimeout(showError("WARNING: UNC's servers are experiencing problems causing significant historical data innacuracies."), 1000);
 	}, false);
 
 function forceUpdate()
@@ -186,7 +186,7 @@ function drawHistoryGraph(jsonResult, historycard, energyType)
 		historycard.host.style.display = "none";
 		return;
 	}
-	if (jsonResult == {} || !jsonResult['data'][energyType][historyType]['previous'] || jsonResult['data'][energyType]['live'] == null) {
+	if (jsonResult == {} || !jsonResult['data'][energyType][historyType]['previous'] || jsonResult['data'][energyType][historyType]['previous'] != [] || jsonResult['data'][energyType]['live'] == null) {
 		showError("Invalid historical " + energyType + " data");
 		historycard.host.style.display = "none";
 		return;
