@@ -47,7 +47,7 @@ function JSONHttpRequest(URL, loadCallback, errorCallback)
 }
 
 // Everything has to load before we use polymer
-document.addEventListener("load", function() {
+window.addEventListener("load", function() {
 	forceUpdate();
 	setTimeout(showError("WARNING: UNC's servers are experiencing problems causing significant historical data innacuracies."), 1000);
 	}, false);
