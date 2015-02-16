@@ -212,7 +212,8 @@ function drawHistoryGraph(jsonResult, historycard, energyType)
 		]
 	};
 	var options = {
-		scaleLabel : "<%= value + '" + dataTable[2] + "' %>"
+		scaleLabel: "<%= value + '" + dataTable[2] + "' %>",
+		animationSteps: 20,
 	};
 
 	if (historyGraphs[energyType] == null)
@@ -291,19 +292,21 @@ function generateHistory(jsonResult, energyType) {
 			break;
 		}
 		case 'monthly': {
-			date.setDate(0);
-			while (labels.length < 30) {
+			date.setDate(1);
+			while (true) {
 				if (jsonResult['data'][energyType][historyType]['current'].length > labels.length)
 					history.push(Math.round(Number(jsonResult['data'][energyType][historyType]['current'][labels.length]['amount'])));
 				else
 					history.push(0);
 				labels.push(date.getDate());
 				date.setDate(date.getDate() + 1);
+				if (date.getDate() == 1)
+					break;
 			}
 			break;
 		}
 		case 'yearly': {
-			const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+			var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 			while (labels.length < 10) {
 				history.push(Math.round(Number(jsonResult['data'][energyType][historyType]['previous'][labels.length]['amount'])));
 				date.setMonth(date.getMonth() - 1);
