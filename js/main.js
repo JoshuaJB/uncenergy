@@ -251,10 +251,14 @@ function generateHistory(jsonResult, energyType) {
 	var date = new Date();
 	switch (historyType) {
 		case 'daily': {
+			date.setHours(0);
 			while (labels.length < 24) {
-				history.push(Math.round(Number(jsonResult['data'][energyType][historyType]['previous'][labels.length]['amount'])));
-				date.setHours(date.getHours() - 1);
+				if (jsonResult['data'][energyType][historyType]['current'].length > labels.length)
+					history.push(Math.round(Number(jsonResult['data'][energyType][historyType]['current'][labels.length]['amount'])));
+				else
+					history.push(0);
 				labels.push(date.getHours());
+				date.setHours(date.getHours() + 1);
 			}
 			break;
 		}
