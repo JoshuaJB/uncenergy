@@ -64,7 +64,8 @@ function updateLiveData()
 	updateLiveChart(document.querySelectorAll("meter-card")[2].shadowRoot, currentBuilding, 'cooling');
 	if (liveTimeout != -1)
 		clearTimeout(liveTimeout);
-	liveTimeout = setTimeout(updateLiveData, 5000);
+	// Continue to update the live data every 10s
+	liveTimeout = setTimeout(updateLiveData, 10*1000);
 }
 function updateHistoricalData()
 {
@@ -73,7 +74,8 @@ function updateHistoricalData()
 	updateHistoryGraph(document.querySelectorAll("history-card")[2].shadowRoot, currentBuilding, 'cooling');
 	if (historyTimeout != -1)
 		clearTimeout(historyTimeout);
-	historyTimeout = setTimeout(updateHistoricalData, 1000*60*60);
+	// Continue to update the historical data every 15m
+	historyTimeout = setTimeout(updateHistoricalData, 1000*60*15);
 }
 
 /*
