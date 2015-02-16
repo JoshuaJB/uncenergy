@@ -113,6 +113,8 @@ function updateHistoryGraph(livecard, buildingID, energyType)
 }
 function drawLiveChart(jsonResult, livecard, buildingName, energyType)
 {
+	if (!livecard)
+		return;
 	// Validate
 	if (jsonResult == null)
 	{
@@ -179,6 +181,8 @@ function drawLiveChart(jsonResult, livecard, buildingName, energyType)
  */
 function drawHistoryGraph(jsonResult, historycard, energyType)
 {
+	if (!historycard)
+		return;
 	// Validate
 	if (jsonResult == null)
 	{
