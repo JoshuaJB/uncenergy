@@ -212,11 +212,26 @@ function drawHistoryGraph(jsonResult, historycard, energyType)
 		]
 	};
 	var options = {
-        scaleLabel : "<%= value + '" + dataTable[2] + "' %>"
-    };
-	if (historyGraphs[energyType] != null)
-		historyGraphs[energyType].destroy();
-	historyGraphs[energyType] = new Chart(ctx).Line(data, options);
+		scaleLabel : "<%= value + '" + dataTable[2] + "' %>"
+	};
+
+	if (historyGraphs[energyType] == null)
+		// Render initial chart
+		historyGraphs[energyType] = new Chart(ctx).Line(data, options);
+	else if (historyGraphs[energyType].datasets[0].points.length == data.datasets[0].data.length) {
+		// Update existing chart
+		for (var i = 0; i < data.datasets[0].data.length; i++) {
+			historyGraphs[energyType].datasets[0].points[i].value = data.datasets[0].data[i];
+			historyGraphs[energyType].update();
+		}
+	}
+	else {
+		// Reload existing chart with new data
+		while (historyGraphs[energyType].datasets[0].points.length)
+			historyGraphs[energyType].removeData();
+		for (var i = 0; i < data.datasets[0].data.length; i++)
+			historyGraphs[energyType].addData([data.datasets[0].data[i]], data.labels[i]);
+	}
 	historycard.getElementById("title").innerHTML = "Historical " + energyType.capitalize() + " Usage";
 }
 function historyTypeString() {
