@@ -278,19 +278,27 @@ function generateHistory(jsonResult, energyType) {
 			break;
 		}
 		case 'weekly': {
-			const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+			var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+			date.setDate(1);
 			while (labels.length < 7) {
-				history.push(Math.round(Number(jsonResult['data'][energyType][historyType]['previous'][labels.length]['amount'])));
-				date.setDate(date.getDate() - 1);
+				if (jsonResult['data'][energyType][historyType]['current'].length > labels.length)
+					history.push(Math.round(Number(jsonResult['data'][energyType][historyType]['current'][labels.length]['amount'])));
+				else
+					history.push(0);
 				labels.push(days[date.getDay()]);
+				date.setDate(date.getDate() + 1);
 			}
 			break;
 		}
 		case 'monthly': {
+			date.setDate(0);
 			while (labels.length < 30) {
-				history.push(Math.round(Number(jsonResult['data'][energyType][historyType]['previous'][labels.length]['amount'])));
-				date.setDate(date.getDate() - 1);
+				if (jsonResult['data'][energyType][historyType]['current'].length > labels.length)
+					history.push(Math.round(Number(jsonResult['data'][energyType][historyType]['current'][labels.length]['amount'])));
+				else
+					history.push(0);
 				labels.push(date.getDate());
+				date.setDate(date.getDate() + 1);
 			}
 			break;
 		}
