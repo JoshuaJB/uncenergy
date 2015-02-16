@@ -277,7 +277,16 @@ function generateHistory(jsonResult, energyType) {
 					history.push(Math.round(Number(jsonResult['data'][energyType][historyType]['current'][labels.length]['amount'])));
 				else
 					history.push(0);
-				labels.push(date.getHours());
+				var hour;
+				if (date.getHours() == 0 || date.getHours() == 12)
+					hour = "12";
+				else
+					hour = String(date.getHours() % 12);
+				if (date.getHours() < 12)
+					hour += "am";
+				else
+					hour += "pm";
+				labels.push(hour);
 				date.setHours(date.getHours() + 1);
 			}
 			break;
