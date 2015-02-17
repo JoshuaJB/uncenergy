@@ -245,25 +245,25 @@ function historyTypeString() {
 	switch (historyType)
 	{
 	case 'daily':
-		return '24 Hours';
+		return 'Today';
 	case 'monthly':
-		return '30 Days';
+		return 'This Month';
 	case 'weekly':
-		return '7 Days';
+		return 'This Week';
 	case 'yearly':
-		return '10 Months';
+		return 'This Year';
 	}
 }
 function historyString(input) {
 	switch (input)
 	{
-	case '24 Hours':
+	case 'Today':
 		return 'daily';
-	case '30 Days':
+	case 'This Month':
 		return 'monthly';
-	case '7 Days':
+	case 'This Week':
 		return 'weekly';
-	case '10 Months':
+	case 'This Year':
 		return 'yearly';
 	}
 }
@@ -322,10 +322,14 @@ function generateHistory(jsonResult, energyType) {
 		}
 		case 'yearly': {
 			var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-			while (labels.length < 10) {
-				history.push(Math.round(Number(jsonResult['data'][energyType][historyType]['previous'][labels.length]['amount'])));
-				date.setMonth(date.getMonth() - 1);
+			date.setMonth(0);
+			while (labels.length < 12) {
+				if (jsonResult['data'][energyType][historyType]['current'].length > labels.length)
+					history.push(Math.round(Number(jsonResult['data'][energyType][historyType]['current'][labels.length]['amount'])));
+				else
+					history.push(0);
 				labels.push(months[date.getMonth()]);
+				date.setMonth(date.getMonth() + 1);
 			}
 			break;
 		}
