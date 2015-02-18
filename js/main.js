@@ -1,9 +1,9 @@
 var currentBuilding = '113';
-var historyType = 'daily';
+var historyTypes = { "electricity": "daily", "heating": "daily", "cooling": "daily" };
 var buildingNameMap = {};
 var jsonRequestQueue = [];
 var liveTimeout = -1, historyTimeout = -1;
-var historyGraphs = {'electricity':null, 'heating':null, 'cooling':null};
+var historyGraphs = { 'electricity': null, 'heating': null, 'cooling': null };
 
 new JSONHttpRequest('/buildingmap.json',
 					function(result) {buildingNameMap = result;populateBuildings();},
@@ -47,10 +47,30 @@ function JSONHttpRequest(URL, loadCallback, errorCallback)
 }
 
 // Everything has to load before we use polymer
-window.addEventListener("load", function() {
+document.addEventListener("DOMContentLoaded", init, false);
+
+function  init() {
+	// Start data load
 	forceUpdate();
+	// Setup dropdown callbacks
+	var elecInter = document.querySelectorAll("history-card")[0].shadowRoot.querySelector('paper-dropdown-menu');
+    elecInter.addEventListener('core-select', function() {
+      historyTypes["electricity"] = historyString(this.selected);
+      updateHistoricalData();
+    });
+	var elecInter = document.querySelectorAll("history-card")[1].shadowRoot.querySelector('paper-dropdown-menu');
+    elecInter.addEventListener('core-select', function() {
+      historyTypes["heating"] = historyString(this.selected);
+      updateHistoricalData();
+    });
+	var elecInter = document.querySelectorAll("history-card")[2].shadowRoot.querySelector('paper-dropdown-menu');
+    elecInter.addEventListener('core-select', function() {
+      historyTypes["cooling"] = historyString(this.selected);
+      updateHistoricalData();
+    });
+	// Warn about data accuracy
 	setTimeout(showError("WARNING: UNC's servers are experiencing problems causing significant historical data innacuracies."), 1000);
-	}, false);
+}
 
 function forceUpdate()
 {
@@ -241,19 +261,6 @@ function drawHistoryGraph(jsonResult, historycard, energyType)
 	}
 	historycard.getElementById("title").innerHTML = "Historical " + energyType.capitalize() + " Usage";
 }
-function historyTypeString() {
-	switch (historyType)
-	{
-	case 'daily':
-		return 'Today';
-	case 'monthly':
-		return 'This Month';
-	case 'weekly':
-		return 'This Week';
-	case 'yearly':
-		return 'This Year';
-	}
-}
 function historyString(input) {
 	switch (input)
 	{
@@ -271,12 +278,12 @@ function generateHistory(jsonResult, energyType) {
 	var history = [];
 	var labels = [];
 	var date = new Date();
-	switch (historyType) {
+	switch (historyTypes[energyType]) {
 		case 'daily': {
 			date.setHours(0);
 			while (labels.length < 24) {
-				if (jsonResult['data'][energyType][historyType]['current'].length > labels.length)
-					history.push(Math.round(Number(jsonResult['data'][energyType][historyType]['current'][labels.length]['amount'])));
+				if (jsonResult['data'][energyType][historyTypes[energyType]]['current'].length > labels.length)
+					history.push(Math.round(Number(jsonResult['data'][energyType][historyTypes[energyType]]['current'][labels.length]['amount'])));
 				else
 					history.push(0);
 				var hour;
@@ -297,8 +304,8 @@ function generateHistory(jsonResult, energyType) {
 			var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 			date.setDate(1);
 			while (labels.length < 7) {
-				if (jsonResult['data'][energyType][historyType]['current'].length > labels.length)
-					history.push(Math.round(Number(jsonResult['data'][energyType][historyType]['current'][labels.length]['amount'])));
+				if (jsonResult['data'][energyType][historyTypes[energyType]]['current'].length > labels.length)
+					history.push(Math.round(Number(jsonResult['data'][energyType][historyTypes[energyType]]['current'][labels.length]['amount'])));
 				else
 					history.push(0);
 				labels.push(days[date.getDay()]);
@@ -309,8 +316,8 @@ function generateHistory(jsonResult, energyType) {
 		case 'monthly': {
 			date.setDate(1);
 			while (true) {
-				if (jsonResult['data'][energyType][historyType]['current'].length > labels.length)
-					history.push(Math.round(Number(jsonResult['data'][energyType][historyType]['current'][labels.length]['amount'])));
+				if (jsonResult['data'][energyType][historyTypes[energyType]]['current'].length > labels.length)
+					history.push(Math.round(Number(jsonResult['data'][energyType][historyTypes[energyType]]['current'][labels.length]['amount'])));
 				else
 					history.push(0);
 				labels.push(date.getDate());
@@ -324,8 +331,8 @@ function generateHistory(jsonResult, energyType) {
 			var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 			date.setMonth(0);
 			while (labels.length < 12) {
-				if (jsonResult['data'][energyType][historyType]['current'].length > labels.length)
-					history.push(Math.round(Number(jsonResult['data'][energyType][historyType]['current'][labels.length]['amount'])));
+				if (jsonResult['data'][energyType][historyTypes[energyType]]['current'].length > labels.length)
+					history.push(Math.round(Number(jsonResult['data'][energyType][historyTypes[energyType]]['current'][labels.length]['amount'])));
 				else
 					history.push(0);
 				labels.push(months[date.getMonth()]);
@@ -337,7 +344,7 @@ function generateHistory(jsonResult, energyType) {
 			showError("Invalid historyType.");
 		}
 	}
-	var units = jsonResult['data'][energyType][historyType]['previous'][0]['unit'];
+	var units = jsonResult['data'][energyType][historyTypes[energyType]]['previous'][0]['unit'];
 	for (var i = 0; i < history.length; i++) {
 		switch (energyType) {
 			case 'electricity':
