@@ -1,5 +1,3 @@
-<link rel="import" href="/components/paper-shadow/paper-shadow.html">
-
 <polymer-element name="history-card">
   <template>
     <style>
@@ -17,19 +15,20 @@
       margin-bottom: 10px;
     }
     #historygraph {
-      position:relative;
-      width:400px;
-      height:400px;
+      position: relative;
+      width: 300px;
+      height: 300px;
+      padding: 50px;
     }
     #title {
       margin-top: 20px;
       width: 100%;
       left: 0px;
-      top:0px;
+      top: 0px;
       color: black;
       font-size: 28px;
-      text-align:center;
-      position:absolute;
+      text-align: center;
+      position: absolute;
     }
     #historySel {
       position:absolute;
@@ -37,32 +36,19 @@
       right: 20px;
       top: 370px;
     }
-    /*paper-dropdown-menu::shadow {
-      position:absolute;
-      left: 20px;
-      right: 20px;
-      top: 370px;
-    }*/
     </style>
     <paper-shadow z="3"></paper-shadow>
     <div class="card-header" layout horizontal center>
-      <div id="historygraph"></div>
+      <canvas id="historygraph" height="300" width="300">Your browser does not support the HTML5 canvas tag.</canvas>
       <p id="title">Loading...</p>
       <p id="building"></p>
-      <paper-dropdown-menu id="historySel" selected="24 Hours" valueattr="label">
-        <paper-item id="daily" label="24 Hours"></paper-item>
-        <paper-item id="weekly" label="7 Days"></paper-item>
-        <paper-item id="monthly" label="30 Days"></paper-item>
-        <paper-item id="yearly" label="10 Years"></paper-item>
+      <paper-dropdown-menu id="historySel" selected="Today" valueattr="label">
+        <paper-item id="daily" label="Today"></paper-item>
+        <paper-item id="weekly" label="This Week"></paper-item>
+        <paper-item id="monthly" label="This Month"></paper-item>
+        <paper-item id="yearly" label="This Year"></paper-item>
       </paper-dropdown-menu>
     </div>
-    <script>
-    var drops = document.querySelector("history-card").shadowRoot.querySelector('paper-dropdown-menu');
-    drops.addEventListener('core-select', function() {
-      historyType = historyString(this.selected);
-      forceUpdate();
-    });
-    </script>
   </template>
   <script>
   Polymer({});
