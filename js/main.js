@@ -255,8 +255,13 @@ function drawHistoryGraph(jsonResult, historycard, energyType)
 		// Reload existing chart with new data
 		while (historyGraphs[energyType].datasets[0].points.length)
 			historyGraphs[energyType].removeData();
+		// Due to some odd issues with Chart.js, we have to add and remove superfluous data.
+		historyGraphs[energyType].addData([0], ""); 
+		historyGraphs[energyType].addData([0], "");
 		for (var i = 0; i < data.datasets[0].data.length; i++)
 			historyGraphs[energyType].addData([data.datasets[0].data[i]], data.labels[i]);
+		historyGraphs[energyType].removeData();
+		historyGraphs[energyType].removeData();
 	}
 	historycard.getElementById("title").innerHTML = "Historical " + energyType.capitalize() + " Usage";
 }
