@@ -255,6 +255,8 @@ function drawHistoryGraph(jsonResult, historycard, energyType)
 		// Reload existing chart with new data
 		while (historyGraphs[energyType].datasets[0].points.length)
 			historyGraphs[energyType].removeData();
+		// Update scale labels
+		historyGraphs[energyType].scale.templateString = options.scaleLabel;
 		// Due to some odd issues with Chart.js, we have to add and remove superfluous data.
 		historyGraphs[energyType].addData([0], ""); 
 		historyGraphs[energyType].addData([0], "");
@@ -348,38 +350,41 @@ function generateHistory(jsonResult, energyType) {
 			showError("Invalid historyType.");
 		}
 	}
-	var units = jsonResult['data'][energyType][historyTypes[energyType]]['previous'][0]['unit'];
+	// Find units and the appropriate multiplier
+	var units = jsonResult['data'][energyType][historyTypes[energyType]]['previous'][0]['nativeUnit'];
+	var prefix = "";
+	var multiplier = 1;
+	// Remove default K prefix on electricity
+	if (energyType == "electricity") {
+		units = "Wh"
+	}
 	for (var i = 0; i < history.length; i++) {
-		switch (energyType) {
-			case 'electricity':
-				// Default units for electricity are kWh, but there in the possiblity for larger units (eg. MWh, GWh...) So adjust back to Wh first.
-				units = "Wh";
-				history[i] *= 1000;
-			case 'cooling':
-				if (history[i] >= 1000) {
-					history[i] *= 0.001;
-					units = 'k' + units;
-				}
-				else if (history[i] >= 1000000) {
-					history[i] *= 0.000001;
-					units = 'M' + units;
-				}
-				else if (history[i] >= 1000000000) {
-					history[i] *= 0.000000001;
-					units = 'G' + units;
-				}
-				else if (history[i] >= 1000000000000) {
-					history[i] *= 0.000000000001;
-					units = 'T' + units;
-				}
-				break;
-			case 'heating':
-				// Not sure about these units
-				break;
-			default:
-				showError("Unknown energy type");
+		// Apply earlier prefix change
+		if (energyType == "electricity") {
+			history[i] *= 1e3;
+		}
+		if (history[i] >= 1e12) {
+			multiplier = 1e-12;
+			prefix = 'T';
+		}
+		else if (history[i] >= 1e9 && multiplier > 1e-9) {
+			multiplier = 1e-9;
+			prefix = 'G';
+		}
+		else if (history[i] >= 1e6 && multiplier > 1e-6) {
+			multiplier = 1e-6;
+			prefix = 'M';
+		}
+		else if (history[i] >= 1e3 && multiplier > 1e-3) {
+			multiplier = 1e-3;
+			prefix = 'k';
 		}
 	}
+	// Apply prefix
+	units = prefix + units;
+	// Apply multiplier
+	for (var i = 0; i < history.length; i++)
+		history[i] *= multiplier;
 	return [history, labels, units];
 }
 
