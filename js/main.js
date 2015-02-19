@@ -355,14 +355,16 @@ function generateHistory(jsonResult, energyType) {
 	var prefix = "";
 	var multiplier = 1;
 	// Remove default K prefix on electricity
-	if (energyType == "electricity") {
-		units = "Wh"
-	}
+	if (energyType == "electricity")
+		units = "Wh";
+	else if (energyType == "heating")
+		units = "BTU/h";
 	for (var i = 0; i < history.length; i++) {
 		// Apply earlier prefix change
-		if (energyType == "electricity") {
+		if (energyType == "electricity")
 			history[i] *= 1e3;
-		}
+		else if (energyType == "heating")
+			history[i] *= 1e6;
 		if (history[i] >= 1e12) {
 			multiplier = 1e-12;
 			prefix = 'T';
