@@ -69,7 +69,7 @@ function  init() {
 		updateHistoricalData();
 	});
 	// Warn about data accuracy
-	setTimeout(showError("WARNING: UNC's servers are experiencing problems causing significant historical data innacuracies."), 1000);
+	setTimeout(showError("WARNING: UNC's servers are experiencing problems causing data innacuracies."), 1000);
 }
 
 function forceUpdate()
@@ -158,19 +158,19 @@ function drawLiveChart(jsonResult, livecard, buildingName, energyType)
 	var ctx = livecard.getElementById('livechart').getContext("2d");
 	var graph = {};
 
-    // User Specs
+	// User Specs
 	graph.x = 200; // Center X
 	graph.y = 200; // Center Y
 	graph.d = 250; // Graph Diameter
 	graph.val = jsonResult[energyType]['amount'] / jsonResult[energyType]['maxRange']; // Current decimal value (0.0 - 1.0)
 
-    // Autogen
+	// Autogen
 	graph.r = graph.d / 2.0;
 	graph.start = 3 * Math.PI / 4.0;
 	graph.end = 9 * Math.PI / 4.0;
 	graph.valEnd = graph.start + graph.val * 3 * Math.PI / 2.0;
 
-    // Gray
+	// Gray
 	ctx.beginPath();
 	ctx.strokeStyle = "#FFFFFF";
 	ctx.fillStyle = "#808080";
@@ -181,7 +181,7 @@ function drawLiveChart(jsonResult, livecard, buildingName, energyType)
 	ctx.stroke();
 	var c = document.getElementById("myCanvas2");
 
-    // Red
+	// Red
 	ctx.beginPath();
 	ctx.strokeStyle = "#FFFFFF";
 	ctx.fillStyle = "#FF0000";
