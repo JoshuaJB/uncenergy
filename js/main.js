@@ -47,27 +47,27 @@ function JSONHttpRequest(URL, loadCallback, errorCallback)
 }
 
 // Everything has to load before we use polymer
-document.addEventListener("DOMContentLoaded", init, false);
+document.addEventListener("polymer-ready", init, false);
 
 function  init() {
 	// Start data load
 	forceUpdate();
 	// Setup dropdown callbacks
 	var elecInter = document.querySelectorAll("history-card")[0].shadowRoot.querySelector('paper-dropdown-menu');
-    elecInter.addEventListener('core-select', function() {
-      historyTypes["electricity"] = historyString(this.selected);
-      updateHistoricalData();
-    });
+	elecInter.addEventListener('core-select', function() {
+		historyTypes["electricity"] = historyString(this.selected);
+		updateHistoricalData();
+	});
 	var elecInter = document.querySelectorAll("history-card")[1].shadowRoot.querySelector('paper-dropdown-menu');
-    elecInter.addEventListener('core-select', function() {
-      historyTypes["heating"] = historyString(this.selected);
-      updateHistoricalData();
-    });
+	elecInter.addEventListener('core-select', function() {
+		historyTypes["heating"] = historyString(this.selected);
+		updateHistoricalData();
+	});
 	var elecInter = document.querySelectorAll("history-card")[2].shadowRoot.querySelector('paper-dropdown-menu');
-    elecInter.addEventListener('core-select', function() {
-      historyTypes["cooling"] = historyString(this.selected);
-      updateHistoricalData();
-    });
+	elecInter.addEventListener('core-select', function() {
+		historyTypes["cooling"] = historyString(this.selected);
+		updateHistoricalData();
+	});
 	// Warn about data accuracy
 	setTimeout(showError("WARNING: UNC's servers are experiencing problems causing significant historical data innacuracies."), 1000);
 }
@@ -198,8 +198,7 @@ function drawLiveChart(jsonResult, livecard, buildingName, energyType)
 	livecard.getElementById("title").innerHTML = "Current " + energyType.capitalize() + " Usage";
 }
 /**
- * WARNING: The history data is notoriously bad. This tries to show data from the previous year
- * and may have significant mislabeling.
+ * WARNING: The histroy data labeling is broken
  */
 function drawHistoryGraph(jsonResult, historycard, energyType)
 {
