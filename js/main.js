@@ -193,6 +193,9 @@ function drawLiveChart(jsonResult, livecard, buildingName, energyType)
 
 	// Fill
 	livecard.getElementById("amount").innerHTML = jsonResult[energyType]['amount'];
+	// Correct live energy usage units
+	if (energyType == "electricity")
+		jsonResult[energyType]['nativeUnit'] = "kW";
 	livecard.getElementById("units").innerHTML = jsonResult[energyType]['nativeUnit'];
 	livecard.getElementById("building").innerHTML = buildingName;
 	livecard.getElementById("title").innerHTML = "Current " + energyType.capitalize() + " Usage";
