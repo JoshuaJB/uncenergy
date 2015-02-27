@@ -270,6 +270,7 @@ function drawHistoryGraph(jsonResult, historycard, energyType)
 	}
 	historycard.getElementById("title").innerHTML = "Historical " + energyType.capitalize() + " Usage";
 }
+// Text on dropdown to API notation
 function historyString(input) {
 	switch (input)
 	{
