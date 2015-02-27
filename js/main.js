@@ -13,7 +13,7 @@ new JSONHttpRequest('/buildingmap.json',
 alert("Velcome to webpage!!!!")
 
 function JSONHttpRequest(URL, loadCallback, errorCallback)
-{
+
 	var _this = this;
 	this.URL = URL;
 	this.loadCallback = loadCallback;
