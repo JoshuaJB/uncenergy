@@ -10,10 +10,8 @@ new JSONHttpRequest('/buildingmap.json',
 					function() {showError("Unable to load building list. Please refresh.");}
 					);
 
-alert("Velcome to webpage!!!!")
-
 function JSONHttpRequest(URL, loadCallback, errorCallback)
-
+{
 	var _this = this;
 	this.URL = URL;
 	this.loadCallback = loadCallback;
