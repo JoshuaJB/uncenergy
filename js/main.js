@@ -4,6 +4,24 @@ var buildingNameMap = {};
 var jsonRequestQueue = [];
 var liveTimeout = -1, historyTimeout = -1;
 var historyGraphs = { 'electricity': null, 'heating': null, 'cooling': null };
+var communities = {
+	"Baity Hill Community": [635, 636, 637, 638, 639], // Not sure about this 
+	"Carmichael Community": [099],
+	"Cobb Community": [122],
+	"Connor Community": [123, 100, 124, 131],
+	"Craige Community": [104],
+	"Ehringhaus Community": [105],
+	"Hinton James Community": [109],
+	"Kenan Community": [121, 125, 126, 129],
+	"Manning East Community": [136, 138],
+	"Manning West Community": [137, 139],
+	"Morrison Community": [113],
+	"Odum Village Community": [156], // Not sure about this
+	"Olde Campus Lower Quad Community": [102, 106, 107, 110, 118],
+	"Olde Campus Upper Quad Community": [108, 111, 112, 114, 115, 117],
+	"Parker Community": [119, 116, 101],
+	"Ram Village Community": [643, 644, 645, 641, 642],
+};
 
 new JSONHttpRequest('/buildingmap.json',
 					function(result) {buildingNameMap = result;populateBuildings();},
@@ -406,6 +424,14 @@ function changeBuilding(newID) {
 function populateBuildings() {
 	var currName;
 	var buildingList = document.querySelector('core-menu');
+	// Add communities
+	for (var community in communities) {
+		currName = document.createElement("core-item");
+		currName.label = community;
+		currName.id = 0; //TODO
+		buildingList.appendChild(currName);
+	}
+	// Add everything else
 	for (var ID in buildingNameMap) {
 		// We have a few hand-picked demo buildings at the top, don't include them twice.
 		if (ID == "113" || ID == "104" || ID == "083" || ID == "086" || ID == "027")
