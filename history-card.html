@@ -1,43 +1,42 @@
-<polymer-element name="history-card">
+<dom-module id="history-card">
+  <style>
+  :host {
+    display: block;
+    position: relative;
+    background-color: white;
+    padding: 20px;
+    width: 100%;
+    font-size: 1.2rem;
+    font-weight: 300;
+    margin-bottom: 20px;
+  }
+  .card-header {
+    margin-bottom: 10px;
+  }
+  #historygraph {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    padding: 50px;
+  }
+  #title {
+    margin-top: 20px;
+    width: 100%;
+    left: 0px;
+    top: 0px;
+    color: black;
+    font-size: 28px;
+    text-align: center;
+    position: absolute;
+  }
+  #historySel {
+    position:absolute;
+    left: 20px;
+    right: 20px;
+    top: 370px;
+  }
+  </style>
   <template>
-    <style>
-    :host {
-      display: block;
-      position: relative;
-      background-color: white;
-      padding: 20px;
-      width: 100%;
-      font-size: 1.2rem;
-      font-weight: 300;
-      margin-bottom: 20px;
-    }
-    .card-header {
-      margin-bottom: 10px;
-    }
-    #historygraph {
-      position: relative;
-      width: 300px;
-      height: 300px;
-      padding: 50px;
-    }
-    #title {
-      margin-top: 20px;
-      width: 100%;
-      left: 0px;
-      top: 0px;
-      color: black;
-      font-size: 28px;
-      text-align: center;
-      position: absolute;
-    }
-    #historySel {
-      position:absolute;
-      left: 20px;
-      right: 20px;
-      top: 370px;
-    }
-    </style>
-    <paper-shadow z="3"></paper-shadow>
     <div class="card-header" layout horizontal center>
       <canvas id="historygraph" height="300" width="300">Your browser does not support the HTML5 canvas tag.</canvas>
       <p id="title">Loading...</p>
@@ -50,7 +49,10 @@
       </paper-dropdown-menu>
     </div>
   </template>
-  <script>
-  Polymer({});
-  </script>
-</polymer-element>
+</dom-module>
+
+<script>
+Polymer({
+  is: "history-card",
+});
+</script>
