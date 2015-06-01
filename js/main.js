@@ -65,27 +65,33 @@ function JSONHttpRequest(URL, loadCallback, errorCallback)
 }
 
 // Everything has to load before we use polymer
-document.addEventListener("polymer-ready", init, false);
+window.addEventListener("WebComponentsReady", init, false);
 
 function  init() {
-	// Start data load
-	forceUpdate();
+	// Setup building list callbacks
+	var buildingList = document.querySelector("paper-menu")
+	buildingList.addEventListener('iron-select', function() {
+		// TODO: Figure out why this callback causes the first list entry to mis-display
+		changeBuilding(buildingList.children[0].children[buildingList.selected].id);
+	});
 	// Setup dropdown callbacks
-	var elecInter = document.querySelectorAll("history-card")[0].shadowRoot.querySelector('paper-dropdown-menu');
-	elecInter.addEventListener('core-select', function() {
+	var elecInter = document.querySelectorAll("history-card")[0].querySelector('paper-dropdown-menu');
+	elecInter.addEventListener('iron-select', function() {
 		historyTypes["electricity"] = historyString(this.selected);
 		updateHistoricalData();
 	});
-	var elecInter = document.querySelectorAll("history-card")[1].shadowRoot.querySelector('paper-dropdown-menu');
-	elecInter.addEventListener('core-select', function() {
+	var elecInter = document.querySelectorAll("history-card")[1].querySelector('paper-dropdown-menu');
+	elecInter.addEventListener('iron-select', function() {
 		historyTypes["heating"] = historyString(this.selected);
 		updateHistoricalData();
 	});
-	var elecInter = document.querySelectorAll("history-card")[2].shadowRoot.querySelector('paper-dropdown-menu');
-	elecInter.addEventListener('core-select', function() {
+	var elecInter = document.querySelectorAll("history-card")[2].querySelector('paper-dropdown-menu');
+	elecInter.addEventListener('iron-select', function() {
 		historyTypes["cooling"] = historyString(this.selected);
 		updateHistoricalData();
 	});
+	// Load data by faking a selection
+	buildingList.select(0);
 	// Warn about data accuracy
 	setTimeout(showError("WARNING: UNC's servers are experiencing problems causing data innacuracies."), 1000);
 }
@@ -97,9 +103,9 @@ function forceUpdate()
 }
 function updateLiveData()
 {
-	updateLiveChart(document.querySelectorAll("meter-card")[0].shadowRoot, currentBuilding, 'electricity');
-	updateLiveChart(document.querySelectorAll("meter-card")[1].shadowRoot, currentBuilding, 'heating');
-	updateLiveChart(document.querySelectorAll("meter-card")[2].shadowRoot, currentBuilding, 'cooling');
+	updateLiveChart(document.querySelectorAll("meter-card")[0], currentBuilding, 'electricity');
+	updateLiveChart(document.querySelectorAll("meter-card")[1], currentBuilding, 'heating');
+	updateLiveChart(document.querySelectorAll("meter-card")[2], currentBuilding, 'cooling');
 	if (liveTimeout != -1)
 		clearTimeout(liveTimeout);
 	// Continue to update the live data every 10s
@@ -107,9 +113,9 @@ function updateLiveData()
 }
 function updateHistoricalData()
 {
-	updateHistoryGraph(document.querySelectorAll("history-card")[0].shadowRoot, currentBuilding, 'electricity');
-	updateHistoryGraph(document.querySelectorAll("history-card")[1].shadowRoot, currentBuilding, 'heating');
-	updateHistoryGraph(document.querySelectorAll("history-card")[2].shadowRoot, currentBuilding, 'cooling');
+	updateHistoryGraph(document.querySelectorAll("history-card")[0], currentBuilding, 'electricity');
+	updateHistoryGraph(document.querySelectorAll("history-card")[1], currentBuilding, 'heating');
+	updateHistoryGraph(document.querySelectorAll("history-card")[2], currentBuilding, 'cooling');
 	if (historyTimeout != -1)
 		clearTimeout(historyTimeout);
 	// Continue to update the historical data every 15m
@@ -159,21 +165,21 @@ function drawLiveChart(jsonResult, livecard, buildingName, energyType)
 	if (jsonResult == null)
 	{
 		showError("No data avalible.");
-		livecard.host.style.display = "none";
+		livecard.style.display = "none";
 		return;
 	}
 	if (jsonResult == {} || !jsonResult[energyType])
 	{
 		showError("Invalid live " + energyType + " data");
-		livecard.host.style.display = "none";
+		livecard.style.display = "none";
 		return;
 	}
 	else
 	{
-		livecard.host.style.display = "block";
+		livecard.style.display = "block";
 	}
 
-	var ctx = livecard.getElementById('livechart').getContext("2d");
+	var ctx = livecard.querySelector('#livechart').getContext("2d");
 	var graph = {};
 
 	// User Specs
@@ -197,7 +203,6 @@ function drawLiveChart(jsonResult, livecard, buildingName, energyType)
 	ctx.closePath();
 	ctx.fill();
 	ctx.stroke();
-	var c = document.getElementById("myCanvas2");
 
 	// Red
 	ctx.beginPath();
@@ -210,13 +215,13 @@ function drawLiveChart(jsonResult, livecard, buildingName, energyType)
 	ctx.stroke();
 
 	// Fill
-	livecard.getElementById("amount").innerHTML = jsonResult[energyType]['amount'];
+	livecard.querySelector("#amount").innerHTML = jsonResult[energyType]['amount'];
 	// Correct live energy usage units
 	if (energyType == "electricity")
 		jsonResult[energyType]['nativeUnit'] = "kW";
-	livecard.getElementById("units").innerHTML = jsonResult[energyType]['nativeUnit'];
-	livecard.getElementById("building").innerHTML = buildingName;
-	livecard.getElementById("title").innerHTML = "Current " + energyType.capitalize() + " Usage";
+	livecard.querySelector("#units").innerHTML = jsonResult[energyType]['nativeUnit'];
+	livecard.querySelector("#building").innerHTML = buildingName;
+	livecard.querySelector("#title").innerHTML = "Current " + energyType.capitalize() + " Usage";
 }
 /**
  * WARNING: The histroy data labeling is broken
@@ -229,19 +234,19 @@ function drawHistoryGraph(jsonResult, historycard, energyType)
 	if (jsonResult == null)
 	{
 		showError("No data avalible.");
-		historycard.host.style.display = "none";
+		historycard.style.display = "none";
 		return;
 	}
 	try {
 		var dataTable = generateHistory(jsonResult, energyType);
-		historycard.host.style.display = "block";
+		historycard.style.display = "block";
 	}
 	catch (e) {
 		showError("Invalid historical " + energyType + " data");
-		historycard.host.style.display = "none";
+		historycard.style.display = "none";
 		return;
 	}
-	var ctx = historycard.getElementById("historygraph").getContext("2d");
+	var ctx = historycard.querySelector("#historygraph").getContext("2d");
 	var data = {
 		labels: dataTable[1],
 		datasets: [
@@ -286,7 +291,7 @@ function drawHistoryGraph(jsonResult, historycard, energyType)
 		historyGraphs[energyType].removeData();
 		historyGraphs[energyType].removeData();
 	}
-	historycard.getElementById("title").innerHTML = "Historical " + energyType.capitalize() + " Usage";
+	historycard.querySelector("#title").innerHTML = "Historical " + energyType.capitalize() + " Usage";
 }
 // Text on dropdown to API notation
 function historyString(input) {
@@ -424,11 +429,11 @@ function changeBuilding(newID) {
 
 function populateBuildings() {
 	var currName;
-	var buildingList = document.querySelector('core-menu');
+	var buildingList = document.querySelector('paper-menu');
 	// Add communities
 	for (var community in communities) {
-		currName = document.createElement("core-item");
-		currName.label = community;
+		currName = document.createElement("paper-item");
+		currName.innerHTML = community;
 		currName.id = 0; //TODO
 		buildingList.appendChild(currName);
 	}
@@ -437,10 +442,9 @@ function populateBuildings() {
 		// We have a few hand-picked demo buildings at the top, don't include them twice.
 		if (ID == "113" || ID == "104" || ID == "083" || ID == "086" || ID == "027")
 			continue;
-		currName = document.createElement("core-item");
-		currName.label = buildingNameMap[ID];
+		currName = document.createElement("paper-item");
+		currName.innerHTML = buildingNameMap[ID];
 		currName.id = ID;
 		buildingList.appendChild(currName);
 	}
 }
-

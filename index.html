@@ -19,9 +19,9 @@
 	<link rel="import" href="./components/paper-menu/paper-menu.html">
 	<link rel="import" href="./components/paper-item/paper-item.html">
 	<link rel="import" href="./components/paper-toast/paper-toast.html">
-	<!-- TO CONVERT -->
-	<link rel="import" href="./components.old/paper-dropdown-menu/paper-dropdown-menu.html">
-	<!-- END TO CONVERT -->
+	<!-- This needs to be updated. Also, paper-shadow is now paper-material
+		<link rel="import" href="./components.old/paper-dropdown-menu/paper-dropdown-menu.html">
+	-->
 	<link rel="import" href="./meter-card.html">
 	<link rel="import" href="./history-card.html">
 	<link rel="import" href="./components.old/font-roboto/roboto.html">
@@ -52,38 +52,29 @@
 			<span>Buildings</span>
 		</paper-toolbar>
 		<paper-menu>
-			<paper-item id="113" label="Morrison Res Hall" class="iron-selected"></paper-item>
-			<paper-item id="104" label="Craige Res Hall"></paper-item>
-			<paper-item id="083" label="Sitterson Hall"></paper-item>
-			<paper-item id="086" label="Caudill Labs"></paper-item>
-			<paper-item id="027" label="Memorial Hall"></paper-item>
+			<paper-item id="113">Morrison Res Hall</paper-item>
+			<paper-item id="104">Craige Res Hall</paper-item>
+			<paper-item id="083">Sitterson Hall</paper-item>
+			<paper-item id="086">Caudill Labs</paper-item>
+			<paper-item id="027">Memorial Hall</paper-item>
 		</paper-menu>
 	</paper-header-panel>  
 	<span tool>UNC Energy Dashboard</span>
 	<div class="container" layout vertical center>
-		<meter-card>
-		</meter-card>
-		<history-card>
-		</history-card>
-		<meter-card>
-		</meter-card>
-		<history-card>
-		</history-card>
-		<meter-card>
-		</meter-card>
-		<history-card>
-		</history-card>
+		<!-- Electric Cards -->
+		<meter-card></meter-card>
+		<history-card></history-card>
+		<!-- Heat Cards -->
+		<meter-card></meter-card>
+		<history-card></history-card>
+		<!-- Cool Cards -->
+		<meter-card></meter-card>
+		<history-card></history-card>
 	</div>
-	<paper-toast id="ajaxError" role="alert" text="There was an error getting data from the server.">
-		<div style="color: #eeff41;" onclick="forceUpdate()">Retry</div>
-	</paper-toast>
-	<script>
-	var tabs = document.querySelector('paper-menu');
-	tabs.addEventListener('iron-select', function() {
-		changeBuilding(tabs.children[tabs.selected].id);
-	});
-	</script>
 </paper-scaffold>
+<paper-toast id="ajaxError" role="alert" text="There was an error getting data from the server.">
+	<div style="color: #eeff41;" onclick="forceUpdate()">Retry</div>
+</paper-toast>
 </body>
 
 </html>
