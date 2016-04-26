@@ -265,11 +265,13 @@ function drawHistoryGraph(jsonResult, historycard, energyType)
 	var options = {
 		scaleLabel: "<%= value + '" + dataTable[2] + "' %>",
 		animationSteps: 20,
+		// Responsiveness is disabled because we don't resize charts and this option breaks sizing
+		responsive: false,
 	};
 
 	if (historyGraphs[energyType] == null)
 		// Render initial chart
-		historyGraphs[energyType] = new Chart(ctx).Line(data, options);
+		historyGraphs[energyType] = new Chart(ctx, {"type":"line", "data":data, "options":options});
 	else if (historyGraphs[energyType].datasets[0].points.length == data.datasets[0].data.length) {
 		// Update existing chart
 		for (var i = 0; i < data.datasets[0].data.length; i++) {
@@ -448,3 +450,4 @@ function populateBuildings() {
 		buildingList.appendChild(currName);
 	}
 }
+
