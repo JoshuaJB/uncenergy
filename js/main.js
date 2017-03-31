@@ -141,18 +141,26 @@ String.prototype.capitalize = function() {
 function updateLiveChart(livecard, buildingID, energyType)
 {
 	var name = buildingNameMap[buildingID];
+	// Allow system to run locally without PHP
+	var prefix = "";
+	if (window.location.hostname === "localhost")
+		prefix = "https://uncenergy-staging.azurewebsites.net/";
 	// Request data
 	var request = new JSONHttpRequest(
-		'api.php?building=' + buildingID + '&live=true',
+		prefix + "api.php?building=" + buildingID + "&live=true",
 		function (result) {drawLiveChart(result, livecard, name, energyType);},
 		showError
 	);
 }
 function updateHistoryGraph(livecard, buildingID, energyType)
 {
+	// Allow system to run locally without PHP
+	var prefix = "";
+	if (window.location.hostname === "localhost")
+		prefix = "https://uncenergy-staging.azurewebsites.net/";
 	// Request data
 	var request = new JSONHttpRequest(
-		'api.php?building=' + buildingID,
+		prefix + "api.php?building=" + buildingID,
 		function (result) {drawHistoryGraph(result, livecard, energyType);},
 		showError
 	);
