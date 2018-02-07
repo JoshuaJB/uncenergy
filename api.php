@@ -10,15 +10,15 @@ switch(array_keys($_REQUEST)[0])
 		{
 			if (array_key_exists('live', $_REQUEST) && $_REQUEST['live'] == true)
 				// Only live data
-				$response = file_get_contents('https://itsapps.unc.edu/energy/rest/buildings/' . $_REQUEST['building'] . '/live');
+				$response = file_get_contents('https://energy.itsapps.unc.edu/energy/rest/buildings/' . $_REQUEST['building'] . '/live');
 			else
 				// Live and historical data
-				$response = file_get_contents('https://itsapps.unc.edu/energy/rest/buildings/' . $_REQUEST['building']);
+				$response = file_get_contents('https://energy.itsapps.unc.edu/energy/rest/buildings/' . $_REQUEST['building']);
 		}
 		break;
 	case 'campus':
 		// Aggregate data
-		$response = file_get_contents('https://itsapps.unc.edu/energy/rest/campus');
+		$response = file_get_contents('https://energy.itsapps.unc.edu/energy/rest/campus');
 		break;
 }
 // Return
