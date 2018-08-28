@@ -5,7 +5,7 @@ var jsonRequestQueue = [];
 var liveTimeout = -1, historyTimeout = -1;
 var historyGraphs = { 'electricity': null, 'heating': null, 'cooling': null };
 
-new JSONHttpRequest('/buildingmap.json',
+new JSONHttpRequest('buildingmap.json',
 					function(result) {buildingNameMap = result;populateBuildings();},
 					function() {showError("Unable to load building list. Please refresh.");}
 					);
